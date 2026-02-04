@@ -56,12 +56,19 @@ key findings (locked in):
   ⟜ **Profunctor:** mapH shows Apps is strong profunctor (contravariant/covariant)
   ⟜ **Zero-cost erasure:** GHC -O2 still eliminates all constructors (needs re-verification)
 
-open problems (clearly bracketed):
+optics exploration (major finding):
+  ⟜ Apps is NOT van Laarhoven optics (different categorical primitives)
+  ⟜ van Laarhoven: functor-parametric modifier (a -> f b) -> s -> f t
+  ⟜ Apps: morphism-direct transformer Apps a b -> Apps s t
+  ⟜ Lens composition breaks with Apps (type mismatch)
+  ⟜ Opportunity: AppsM m a b for effectful traced lenses (State/Parser/IO)
+  → See ~/repos/apps/OPTICS_FINDINGS.md for full analysis
+  → Next: implement AppsM and test with effects
+
+remaining open problems:
   ⟜ [Axioms: cite from Kidney & Wu 2026 paper]
-  ⟜ [Sliding mechanism: reconstruct precise argument from types]
-  ⟜ [Applicative Cases 2-4: type-check mixed constructor cases]
   ⟜ [Kan extension: prove Apps a b ~ Fix (Ran (Const a) (Const b))]
-  ⟜ [Int construction: detailed compact closed extension]
+  ⟜ [AppsM: monadic extension for effectful computation]
   ⟜ [Codata principle: space held for coinductive/inductive duality]
 
 → Problem set is documented, shareable, team-ready
