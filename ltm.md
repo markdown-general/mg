@@ -29,8 +29,47 @@
   ⟜ 5-phase protocol: Assessment → Integrity → Extraction → Cleanup → Commit
   ⟜ Standardizes ltm.md updates (✓ Card: [name] ✓ format, consistent scanning)
   ⟜ Improves commit hygiene (card: [name] ⟜ insight as prefix)
-  ⟜ Defines reusable artifact handling (logs stay in yin/log/, temp in gitignore)
+  ⟜ Defines reusable artifact handling (logs stay in yin/log_, temp in gitignore)
   → Living protocol; refine with each card completion
+
+---
+
+✓ Card: apps.md ⟜ free traced categories via GADT + zero-cost erasure ✓
+
+**session trajectory:** frozen chat → narrative outline → type-driven sliding → Core erasure analysis → shipped
+
+delivered:
+  ⟜ ~/repos/apps/ initialized with GADT-based free traced category (c5f2ef4)
+  ⟜ README.md (overview + properties + status)
+  ⟜ NARRATIVE_OUTLINE.md (10-section structure with [BRACKETS] for open holes)
+  ⟜ ZERO_COST_SECTION.md (erasure mechanism + GHC Core analysis + benchmarks)
+  ⟜ ~/repos/hyp1 wrapped (Stream refactoring, FileEcho module - 71ed9bd)
+  ⟜ Raw exploration archived (~/self/intake/apps-frozen-chat-2026-02-04.md)
+
+key findings (confirmed):
+  ⟜ **Type-driven sliding:** run (Compose (Trace o p) q) = o (run (Compose q p)) forced by types
+  ⟜ **Zero-cost erasure:** GHC -O2 eliminates all GADT constructors; result is bare functions
+  ⟜ **Applicative self-reference:** (<*>) f a = fmap (<*>) f <*> a is the fixpoint
+  ⟜ **Apps = Hyperfunctions:** GADT encoding vs newtype; same structure, different syntax
+  ⟜ **Profunctor:** mapH shows Apps is strong profunctor (contravariant/covariant)
+
+open problems (clearly bracketed):
+  ⟜ [Axioms: cite from Kidney & Wu 2026 paper]
+  ⟜ [Sliding mechanism: reconstruct precise argument from types]
+  ⟜ [Applicative Cases 2-4: type-check mixed constructor cases]
+  ⟜ [Kan extension: prove Apps a b ~ Fix (Ran (Const a) (Const b))]
+  ⟜ [Int construction: detailed compact closed extension]
+  ⟜ [Codata principle: space held for coinductive/inductive duality]
+
+→ Problem set is documented, shareable, team-ready
+→ Architecture clear; holes visible; ready for collaborative filling
+→ Ready for papers + next work cycles
+
+reference:
+  - ~/repos/apps/README.md (start here)
+  - ~/repos/apps/NARRATIVE_OUTLINE.md (architecture + holes)
+  - ~/markdown-general/design/apps/ (problem context)
+  - ~/self/intake/apps-frozen-chat-2026-02-04.md (raw thinking)
 
 ---
 
