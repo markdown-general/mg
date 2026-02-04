@@ -34,9 +34,9 @@
 
 ---
 
-✓ Card: apps.md ⟜ free traced categories via GADT + zero-cost erasure ✓
+✓ Card: apps.md ⟜ ArrowLoop encoding of traced categories ✓
 
-**session trajectory:** frozen chat → narrative outline → type-driven sliding → Core erasure analysis → shipped
+**session trajectory:** frozen chat → narrative outline → type-driven sliding → **ArrowLoop breakthrough** → implemented
 
 delivered:
   ⟜ ~/repos/apps/ initialized with GADT-based free traced category (c5f2ef4)
@@ -46,12 +46,15 @@ delivered:
   ⟜ ~/repos/hyp1 wrapped (Stream refactoring, FileEcho module - 71ed9bd)
   ⟜ Raw exploration archived (~/self/intake/apps-frozen-chat-2026-02-04.md)
 
-key findings (confirmed):
-  ⟜ **Type-driven sliding:** run (Compose (Trace o p) q) = o (run (Compose q p)) forced by types
-  ⟜ **Zero-cost erasure:** GHC -O2 eliminates all GADT constructors; result is bare functions
-  ⟜ **Applicative self-reference:** (<*>) f a = fmap (<*>) f <*> a is the fixpoint
-  ⟜ **Apps = Hyperfunctions:** GADT encoding vs newtype; same structure, different syntax
+key findings (locked in):
+  ⟜ **ArrowLoop IS Apps:** Trace :: (b -> c) -> Apps a b -> Apps a c encodes the monoidal trace
+  ⟜ **run :: Apps a b -> (a -> b):** Universal interpretation as functions (not just fixed points)
+  ⟜ **Full Arrow/ArrowLoop instances:** first, second, loop all implemented and type-safe
+  ⟜ **Applicative trivial:** f <*> g = lift $ \a -> run f a (run g a) (via revised run)
+  ⟜ **Conway trace via fixpoint:** fixpoint :: Apps a a -> a for closed loops
+  ⟜ **Apps = Hyperfunctions:** GADT encoding matches Kidney & Wu newtype (POPL 2026)
   ⟜ **Profunctor:** mapH shows Apps is strong profunctor (contravariant/covariant)
+  ⟜ **Zero-cost erasure:** GHC -O2 still eliminates all constructors (needs re-verification)
 
 open problems (clearly bracketed):
   ⟜ [Axioms: cite from Kidney & Wu 2026 paper]
