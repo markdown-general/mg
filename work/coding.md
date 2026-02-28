@@ -1,13 +1,25 @@
 # coding.md
 
-**coding** ⟜ programming in markdown
-**card** ⟜ the function (name, inputs, outputs, preconditions, side effects)
-**agent** ⟜ the runtime (human, AI, collaborator)
-**casting** ⟜ defunctionalization (capture) and refunctionalization (release)
+## good comms
 
-## the core insight
+Whether code is a card or bash or abstract maths, coding is to encode an intention.
 
-Programming in markdown isn't about creating executable syntax. It's about writing clear instructions that any agent - human or AI - can read and act on. The card is the program. The agent is the runtime.
+A primal and often primary judgement in most matters of coding is then good communication; with fellow coders and makers, with computers and external APIs. Agents calling something elegant is often expressing "good comms" - a nice compact set of tokens and a well expressed intent.
+
+When you are coding you are either:
+
+⟜ on a long path, going solo, or
+⟜ in a conversation, and pair programming with design, and other agents and operators.
+
+On a solo run, you can forget the early part of the journey, so it's a good idea to journal along the way and remind yourself of the details from time to time. Even on a solo run you and your code are communicating to your future self.
+
+When pair or swarm programming, the conversation is the journalling. The prime objective of pair programming is to share knowledge and work to skills. What this often means for the objectives is to prioritise knowledge discovery over card progression. Going it alone is perfect for boring warnings and errors. But if an agent finds a large bug or a difficult problem or has options at a design juncture they should stop and share, chat and breathe.
+
+## card coding
+
+Most cards in markdown-general can be considered to be code. 
+
+Programming in markdown means writing instructions clear enough that any agent - including future you - can execute. The card is the function. The agent is the runtime. The result is whatever valid execution the agent produces.
 
 When you write:
 
@@ -77,6 +89,3 @@ result (refunctionalized) ⟜ actual effect, variable
 
 Different agents produce different executions from the same card. The complexity is in the execution, not the specification.
 
-## stamp
-
-Programming in markdown means writing instructions clear enough that any agent - including future you - can execute them. The card is the function. The agent is the runtime. The result is whatever valid execution the agent produces.

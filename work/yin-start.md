@@ -20,8 +20,6 @@ The runner (human) and you work as a team. You've read the context above. You're
 
 **Breathe ends when the runner sends a card or asks a question in the conversation.** Then you move to Flow (what's the state?) and Work (what's the decision and execution?). The cycle turns.
 
-You'll know what to do. The runner has your back.
-
 Await the next message from the runner.
 
 

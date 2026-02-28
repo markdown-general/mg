@@ -4,10 +4,6 @@ markdown ⟡ general ⟜ pattern ⟡ reflect
 
 ---
 
-[⟜ welcome](captain/welcome.md)
-
----
-
 ### [markdown](markdown) ⟜ you're reading it.
 
 Here's some markdown:
@@ -21,7 +17,7 @@ The ⟜ can be read roughly as "to elaborate". Markdown, to elaborate, is where 
 The ⟡ symbol is there to attach a relationship between the two words, that the unfolding changes both. Like math and coding, you can use symbols that start out as anonymous and end up meaningful.
 
 
-### general as in ⟜ purpose; needs abstraction; not special; needing generalists
+### general as in ⟜ purpose; needs abstraction; not special; requiring a range of expertise
 
 We make markdown in [general](general). We are makers of [markdown](markdown).
 
@@ -39,7 +35,7 @@ The library structure aligns with being makers, consisting of mostly markdown in
 
 - work/ - our identity, who we are, our cache, let's go!
 - tools/ - executable cards to get stuff done
-- captain/ - leadership, guidance, entry point
+- design/ - leadership, guidance, entry point
 - yard/ - transient material, work-in-progress
 - yin/ - yin coordination, logs, ephemeral session state
 
