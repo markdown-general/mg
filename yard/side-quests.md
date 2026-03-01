@@ -77,5 +77,18 @@ Attempted: Grok/Claude.ai chat message submission via CDP KeyboardEvent + form i
 
 **Blocker**: Don't rename markdown-general until we know how to preserve session continuity.
 
+## TODO: Haskell core libraries skill
+
+Gather local copies of common Haskell dependencies and Haskell environment knowledge. Create an upgrade/skill that agents can use for Haskell development.
+
+**Scope**: 
+- Survey ~/haskell/ for dependency patterns
+- Document common libraries (numhask, chart-svg, hyp, etc.)
+- Environment setup (GHC, cabal, stack, nix)
+- Common workflows and gotchas
+- Package structure, build patterns
+
+**Output**: upgrades/haskell-core-libraries.md or similar skill card that helps new agents (or humans) navigate the Haskell ecosystem locally.
+
 ---
 
