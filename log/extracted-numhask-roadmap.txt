@@ -1,0 +1,434 @@
+Numerical Haskell: a NumHask roadmap
+
+What is NumHask?
+NumHask is an alternative set of numerical classes, developed over the last
+decade by Tony Day.
+The standard system of numerical classes in base Haskell was defined to package
+the functionality of the provided numerical types. In particular, it was not
+defined with a view to the functionality other numerical types that others might
+have a need for.
+Indeed, it is easy to think of systems of numbers that are poorly represented
+even by the most basic Haskell number class, Num:
+• Vectors (in two dimensions, let’s say for definiteness) have well-defined
+addition and subtraction, and one might want to write those as + and -.
+But there is no multiplication, and certainly no division. So one has to
+define a dishonest Num instance where multiplication is undefined. This is
+of course forces us to forgo the safety of the type system: if one multiplies
+vectors, one discovers this only when the program crashes at runtime,
+rather than at compile time as one should.
+• The Complex type makes perfect sense for any base ring: for example
+Complex
+Int is the Gaussian integers. However, we don’t have a Num
+instance for Complex Int: we only have
+RealFloat a => Num (Complex a)
+This is because Num instances require an absolute value abs and a sign
+signum, which for complex numbers z are interpreted to mean the magnitude |z| and the normalisation z/|z|, which require square roots, and Int
+doesn’t have them.
+If you want arithmetic operations on the Gaussian integers, the situation
+here is even worse: you need to create a newtype for Complex and then
+put a Num instance on that, again providing bottom-valued instances for
+the inappropriate methods abs and signum, and live with the fact that you
+have two different versions knocking around.
+NumHask provides a more gradual approach: there are classes corresponding to
+smaller chunks of functionality, so you can express what functionality a number
+1
+
+type has in a much more nuanced way.
+For example, the four basic arithmetic operations are provided by classes
+Additive, Subtractive, Multiplicative and Divisive, so that vectors can
+have instances of the first two but not the last two, and so we can have
+Additive a => Additive (Complex a)
+and so on.
+
+What might NumHask be?
+I want to discuss a broad collection of things that I think NumHask could do
+better. In some cases I’ve got a fairly strong idea how to do it, in some cases
+maybe just some steps in the right direction, and in some cases not even that.
+Some of them interact, and I’ve tried to highlight that where it’s interesting to
+do so.
+1. Explicit property classes
+At present, NumHask confuses structure and properties fairly systematically.
+We have
+type Distributive a = (Additive a, Multiplicative a)
+type Ring a = (Distributive a, Subtractive a)
+type SemiField a = (Distributive a, Divisive a)
+type Field a = (Ring a, Divisive a)
+I find this a little uncomfortable. Anybody can define a type and put Additive
+and Multiplicative instances on it, and nobody has warned them not to do
+this if the two instances don’t satisfy a distributive law, and so NumHask will
+give the appearance of certifying that a distributive law holds whether or not it
+actually does, insofar as that type can automatically be used for functions with
+Distributive in the context.
+Perhaps we can trust people not to put both such instances on a type if they do
+not play nicely with each other. However, for a real-life problem present right
+now in the library, we have an instance of Ring for Natural… but the natural
+numbers do not form a ring!
+I suppose the mildest solution would be simply to add grave warnings to the documentation. But it’s probably better to use classes as a certification of behaviour,
+so that we have
+class (Additive a, Multiplicative a) => Distributive a
+and so on. If you implement these you’re guaranteeing that the relevant behaviour actually holds: for example, defining a Distributive instance is a
+guarantee that there is a distributive law. This does of course increase the work
+
+2
+
+of providing functionality on numeric types, but on the whole it’s a good thing
+to think about whether various laws hold, and to document one’s conclusions.
+Actually, Semiring is probably a better name than Distributive, since it follows
+the pattern of the other names better.
+Sometimes the current approach is appropriate, as some properties are just
+useful combinations of others. For example, it would cause no problems to
+define
+type Ring a = (Semiring a, AdditiveGroup a)
+because a ring is the same thing as a semiring with a total subtraction operation.
+1.1. The role of FromInteger We should embed FromInteger in the hierarchy
+more aggressively. Any ring can have a FromInteger instance defined on it (as
+a category theorist would say, “ℤ is initial in the category of rings”), so making
+FromInteger part of Ring as well seems like a good idea. It’s more work for the
+implementor but makes life easier for the user.
+It would similarly make sense to make any type classes designed to represent
+the real numbers (like ExpField and TrigField) depend on FromRational;
+currently coding with these classes requires quite a lot of circumlocation (one /
+(one + one) appears in the codebase, for example).
+2. Partial subtraction and division: an honest approach
+There’s currently a philosophical inconsistency between what Subtraction and
+Division represent. I think a bit of thought can result in more features, more
+implementation, and more clarity.
+What’s the problem? Well, here’s the discrepancy:
+• It is normal practice to provide Subtractive instances, even when subtraction is a partial operation. Natural has a Subtractive instance just like
+how Int does, even though the former is partial while the latter is total.
+• Pretty much all Divisive instances are partial, in that division by zero is
+pretty much never defined. However, in practice instances are only defined
+if they’re total except for division by zero.
+This is not really a problem that originated with NumHask: it’s just the long
+shadow of base Haskell’s Num class, which demands (+), (-) and (*) to do
+anything at all, but has (/) sitting further up the class hierarchy.
+What should be done about it? Here’s three ideas.
+2.1. Consistently providing instances We should provide Divisive instances
+whenever we have a natural concept of division which is
+• at least sometimes defined;
+
+3
+
+• checked, in the sense that undefined divisions return an error; and
+• lawful, in that the following laws hold:
+– x / 1 is always defined and equal to x,
+– if x * (y / z) is defined then so is (x * y) / z, and if so they are
+equal, and
+– x / (y * z) is defined if and only if (x / y) / z is, and if so they
+are equal.
+In particular, Int should have be Divisive, and this functionality is useful (if
+you have a number n which you believe should be even, then n / 2 will halve it
+if possible and throw an error if not).
+The policy for defining Subtractive instances should be precisely analogous,
+but by and large this is just codifying what’s already there! Meanwhile Additive
+and Multiplicative will be assumed to represent total operations.
+The arithmetic exceptions in base Haskell are not perfectly geared up for this;
+Underflow is a good error to return when subtraction fails, but not all division
+failures are DivideByZero. They could be replaced, or we could live with it.
+It’s also worth pointing out that we make a practical and philosophical distinction between operations which are partial because of limitations in the way they
+model mathematical numbers, and operations which are partial for inherent
+mathematical reasons. For example, Int has a machine-specific bound: currently
+(−263 , 263 − 1) on many systems (including mine). This means I can’t correctly
+evaluate 5000000000000000000 + 5000000000000000000 :: Int, but we nevertheless regard Int as having a total addition operation: it’s intended to model
+the integers, and intended to be used only in situations where its limitations as
+a model of the integers can safely be overlooked.
+2.2. Property classes In keeping with section 1 above, a number of classes
+should be added which certify good properties of subtraction and division. The
+obvious examples are:
+• AdditiveGroup, to indicate that subtraction is total (which will be the case
+for many inbuilt numeric types);
+• MultiplicativeGroup, to indicate that division is total (which will not be
+the case for many inbuilt numeric types, because of division by zero);
+• Field, to indicate a (commutative) ring which is total except for division
+by zero. Section 5 below, on commutativity, will be relevant here.
+2.3. Introspective arithmetic classes There is additional functionality which
+can often be provided, and which eases the difficulty of working with partial
+operations. This functionality is embodied in the following two classes:
+class Subtractive a => WhenSubtractive a where
+-- | Subtract or report failure
+
+4
+
+(-?) :: a -> a -> Maybe a
+-- | Is "x - y" defined?
+subtractable :: a -> a -> Bool
+-- | Negate or report failure
+tryNegate :: a -> Maybe a
+-- | Is "negate x" defined?
+negatable :: a -> Bool
+class Divisive a => WhenDivisive a where
+-- | Divide or report failure
+(/?) :: a -> a -> Maybe a
+-- | Is "x / y" defined?
+dividable :: a -> a -> Bool
+-- | Invert or report failure
+tryRecip :: a -> Maybe a
+-- | Is "recip x" defined?
+invertible :: a -> Bool
+These classes can be defined for almost all current instances of Subtractive and
+Divisive, and could usually be defined uniformly from a small number of basic
+instances using deriving via.
+The exceptions are some extremely large types. We have
+Subtractive b => Subtractive (a -> b)
+but for a general type a there is no way to tell whether one function can be
+subtracted from another, so a -> b will not have a WhenSubtractive instance.
+I’m not particularly enamoured of the names WhenSubtractive and
+WhenDivisive but also haven’t identified anything better.
+3. Exponentiation
+Notions of exponentiation in mathematics, and correspondingly in Haskell, fall
+into two classes:
+• In any ring, it is possible to raise elements to positive integer powers
+(by induction), and for invertible elements it is possible to extend this
+to all integer powers. In base Haskell, these concepts are represented by
+
+5
+
+the operators (^) and (^^) respectively. In NumHask, currently, both
+operators are used but both for the latter concept.
+• In the reals, and some closely related rings, there is a more analytic exponentiation: for example, we can raise a positive real to any real power. In
+both base Haskell and NumHask this is represented by the operator (**).
+3.1. Exponentiation with Integral exponents Being able to exponentiate elements of arbitrary rings (by positive integers) is rather important, and it is a
+shame that NumHask currently doesn’t support this: currently it uses (^^) for
+an Int-only version of (^); if this is useful enough to be worth having, then
+other notation can surely be found.
+I propose making (^) a method of the Multiplicative class, and (^^) a method
+of the Divisive class.
+The main reason is that there are many families of instances where a significantly
+more efficient implementation can be given. These include:
+• rings of floating-point numbers, where defining (^) and (^^) in terms of
+(**) is preferable;
+• idempotent rings, such as the Boolean ring, where (^) has very simple
+behaviour;
+• rings from modular arithmetic, where the Fermat-Euler theorem allows
+more efficient exponentiation (and this is vital for cryptographic purposes).
+The situation is parallel to the situation for Semigroup, where stimes is a method
+with a default definition rather than a function for exactly the same reasons.
+And, indeed, this change would improve the interaction with Monoid: when we
+define the Semigroup instance on Product, we can define stimes to be (^); if
+there are efficient powers, they will propagate through.
+It might also be asked: if it’s useful to define (^) to be repeated multiplication
+on Multiplicative instances, why shouldn’t we also provide repeated addition
+for Additive instances? After all, the classes are formally similar in most other
+regards. The answer is it’s unlikely to be necessary, because in most cases of
+interest it can be done efficiently with functions that already exist: the n-fold
+repeated addition of x can usually be defined to be x * fromInteger n.
+4. Division with remainder
+NumHask’s Integral class is a close copy of the one in base Haskell, and there
+are some reasons to find it unsatisfactory.
+The documentation is very cagey about what it’s for. First, they’re described as
+“integral numbers”, a vague term which could mean “integers”, “elements of an
+integral domain” (a ring where if xy=0 then x=0 or y=0), or some more abstruse
+concept like “algebraic integers”. It goes on to say that “Integral instances are
+
+6
+
+customarily expected to define a Euclidean domain…” which encourages the
+more general interpretations.
+However, many well-established practical uses of Integral make a definite
+and poorly-stated assumption that the type consists of actual integers. For
+example, stimes in Data.Semigroup, or (^) and (^^) will simply not work
+if used on anything that doesn’t obey extra laws. In particular the Gaussian
+integers Complex Int are a Euclidean domain, and so one might be tempted to
+put an Integral instance on them (using a newtype), but anyone attempting to
+work out 3𝑖 using (^) will be sorely disappointed for reasons the type system
+ought to know about.
+The concept of division with remainder is a very general one, but having two
+different conventions division with remainder (that is, div and mod rounding
+towards minus infinity, and quot and rem rounding towards zero) is an idiosyncracy of the integers: for example, polynomials with coefficients in a field have
+polynomial long division with remainder, but there is no choice of rounding convention. And, indeed, for the integers there is at least one other sensible rounding
+convention, which is not supported by the base prelude, but well-known and
+frequently useful: rounding to the nearest multiple (in fact, I personally feel this
+may be more useful than quot and rem).
+It is not fully clear how best to proceed, but I think two things need to be done
+somehow (not counting the need to improve the documentation in base).
+4.1. Classes for division with remainder The NumHask philosophy is to have
+classes which can be thought of as atomic units of algebraic structure.
+It’s safe to say that div, mod and divMod jointly form such a unit, and so should
+be encapsulated in a class. It’s also safe to say that quot, rem and quotRem do.
+One approach is to have two classes, which of course would look like duplicates
+of one another.
+A more daring approach would be to try to provide only one class with flexibility.
+We might be able to do it by providing an extra “policy” type:
+class Remaindered p a where
+quotient :: p -> a -> a -> a
+remainder :: p -> a -> a -> a
+quotientRemainder :: p -> a -> a -> (a, a)
+data ToMinusInfty = ToMinusInfty
+data ToZero = ToZero
+instance Remaindered ToMinusInfty Int where
+quotient _ = P.div
+remainder _ = P.mod
+
+7
+
+quotientRemainder _ = P.divMod
+instance Remaindered ToZero Int where
+quotient _ = P.quot
+remainder _ = P.rem
+quotientRemainder _ = P.quotRem
+We could then hide the general framework in a way consistent with much existing
+code by defining
+quot = quotient ToZero
+rem = remainder ToZero
+quotRem = quotientRemainder ToZero
+div = quotient ToMinusInfty
+mod = remainder ToMinusInfty
+divMod = quotientRemainder ToMinusInfty
+4.2. The future of Integral Whatever we end up doing, we can then redo
+Integral over the top. We should adjust the documentation to make it clear
+that the class is solely for types which model the naturals or integers.
+Given this newfound clarity of purpose, it would be possible to move other
+functionality into Integral. Among all the huge array of structure reliably possessed by integer types, the most suitable thing might be code related to digits
+(in binary, and in other bases).
+5. Commutativity
+One design feature of NumHask is to assume that addition is commutative, but
+not to assume that multiplication is. This seems very sensible to me.
+However, there are places in the codebase where assumptions of commutative
+multiplication creep in. We should remove these assumptions where it’s not
+going to cause anyone much extra work, and be explicit about them if not.
+5.1. Property classes Following Section 1, the obvious thing to do is to introduce a new class Commutative certifying that multiplication is commutative.
+Some natural constraints can be built by combining that with others:
+type CommutativeSemiring a = (Commutative a, Semiring a)
+type CommutativeRing a = (Commutative a, Ring a)
+5.2. Commutativity and division At present, Divisive quietly assumes commutativity. The issue is that, for a noncommutative ring, there is left division
+and right division, and they will not agree: solving the equations ax=b and xa=b
+
+8
+
+will yield different values of x. NumHask makes no effort to distinguish them,
+so any noncommutative Divisive instance has unspecified behaviour.
+It would be a bit of work to distinguish them, and provide both (using the
+symbol \ for division on the other side, perhaps, though that will upset the
+people who use it for set complementation) but it’s certainly possible.
+The other solution, which is the path of least resistance in the short term, is to
+make Divisive a subclass of Commutative. This rules out using Divisive for
+noncommutative groups with multiplicative notation, and rules out working
+with the quaternions, but can be done by changing one line of code and adding
+some documentation.
+5.3. Noncommutative Multiplicative actions There is a fairly similar problem
+with MultiplicativeAction, but I think that the analysis of costs and benefits
+works out differently.
+This also currently quietly assumes commutativity. The standard axiom, not
+currently mentioned in the documentation, is that
+(m |* x) |* y = m |* (x * y).
+One might expect the left-sided version (*|) to satisfy the analogous law
+x *| (y *| m) = (x * y) *| m
+but in fact since we have (*|) = flip (|*), we have the backwards version of
+the law
+x *| (y *| m) = (y * x) *| m
+In any situation where it makes a difference, this behaviour is likely to surprise
+and confuse.
+As above, one could demand that a MultiplicativeAction requires its scalars
+to be Commutative, but solving it more properly is not difficult: one can make
+both (*|) and (|*) members of the class, with each defined in terms of the
+other by default.
+There is also a more nerdy solution, which is to put (*|) and (|*) in different classes LeftMultiplicativeAction and RightMultiplicativeAction. A
+MultiplicativeAction would then be a subclass of both, required to satisfy
+the compatibility law
+x *| (m |* y) = (x *| m) |* y
+While we’re about it, along the lines of Section 1, it might be worth having a
+class (perhaps called Module) certifying the very common distributivity law for
+a multiplicative action by a semiring:
+m |* 0 = 0
+m |* (x + y) = m |* x + m |* y
+
+9
+
+6. Positivity and ordered structures
+The current interface for positive numbers is perfectly functional, but a little
+clumsy.
+There are several different variant behaviours one might want to deal with:
+• Some types have no meaningful ability to restrict to positive numbers at
+all (like complex numbers, the ring of integers modulo p, and so on);
+• Some types are already all positive (like Natural), and so converting to
+and from positive numbers should be the identity function;
+• Some types have natural positive counterparts (like Word64 for Int64 and
+so on), and builtin functionality should be used;
+• Some types can use a homebrew version.
+It would be more within the spirit of the library to have a typeclass representing
+that a numeric type has a positive counterpart, and use a type family or a
+functional dependency to keep track of what it is.
+Also, all uses of positive actually mean nonnegative, but I’m not sure if that stands
+to confuse anyone.
+7. Heavier use of Newtypes
+7.1. Systematic newtype deriving Both before and after implementing the proposals above, a very large number of instance definitions will have very similar
+code. These can be shortened using DerivingVia. For example, many Additive
+instances are defined because the base Prelude gives then Num instances, and
+having a newtype FromBase and an instance
+instance (P.FromInteger a, P.Num a) => Additive (FromBase a) where
+zero = 0
+(+) = (P.+)
+then instance definitions like
+deriving via FromBase Int instance Additive Int
+are quicker and clearer than repeating ourselves.
+7.2. Interacting with base Interacting with base is unavoidable, since users of
+NumHask are going to wish to interact with code based on base. The methods
+of the above section go the other way. We should have a ToBase newtype, in
+order to provide Num instances.
+A goodly amount of NumHask structure will be required even to produce a Num,
+but that’s okay.
+
+10
+
+7.3. Other utility newtypes There are other sensible newtypes for transferring
+structure. For example, to convert between Additive and Multiplicative. The
+most sensible names for these are Exp and Log, perhaps!
+instance Additive a => Multiplicative (Exp a) where
+one = Exp zero
+Exp x * Exp y = Exp (x + y)
+instance Multiplicative a => Additive (Log a) where
+zero = Log one
+Log x + Log y = Log (x * y)
+8. Other
+8.1. Ratios NumHask currently redefines the Ratio type verbatim from the
+Prelude. This doesn’t seem wise: reusing it improves interoperability.
+The Prelude defines the functions numerator and denominator, which are useful.
+Something the Prelude doesn’t define is a nice idiom for rational literals. One
+can write 123 to get fromInteger 123 in any numeric type which supports it.
+One can write 0.123 to get fromRational (123 :% 1000) in any numeric type
+which supports it. But in order to get fromRational (12 :% 34) you have to
+write out the fromRational longhand. This is upsetting: there must be many
+programmers who need 1/3 or 1/6 far, far more frequently than they need
+explicit floating-point literals. So it would be nice to have an operator which
+imitates a literal rational. (But which operator?)
+8.2. Complex numbers The NumHask implementation of Complex is not compatible with the one in base: the former is a lazy pair, whereas the latter is a
+strict pair. The rationale for doing this is to make DerivingVia easier, but the
+library does not use DerivingVia to derive any functionality from pairs.
+It would probably be better to reuse the base Complex; one could still set things
+up in such a way that EuclideanPair has a compatible implementation, allowing
+DerivingVia to get functionality from it to Complex.
+The ExpField instance for EuclideanPair would probably be more suitable for
+Complex alone, and the semilattice instances for Complex are not algebraically
+very meaningful.
+8.3. Extra instances
+
+There are a few missing instances dotted around:
+
+• FromInteger for Ratio, Sum and Product
+• Monus for Natural and Word
+
+11
+
+8.4. Squared norms Since an advantage of NumHask is that it makes complex
+numbers usable even when the base ring has not much structure, it is useful to
+have the squared norm:
+normSquared :: Ring a => Complex a -> a
+normSquared (Complex x y) = x*x + y*y
+The squared norm is a usable replacement for the actual norm in many circumstances, and doesn’t demand the existence of square roots.
+8.5. Subtract The base Prelude defines subtract to be flip (-), and so should
+NumHask. This is useful for currying, because the parser has to be weird about
+(-) given its dual use as a unary operator. For example, you can write things
+like fmap (subtract 1) a to decrement every element of a data structure.
+8.6. Trivial actions It would be useful for building up structures to have
+TrivialAction, a type which has arithmetic actions by itself.
+8.7. Inhomogeneous products It would be useful to have an inhomogeneous
+product type, which has arithmetic operations pointwise. I thought about
+suggesting that tuples be given this structure, and I can see arguments in favour
+of doing this, but it’s probably better to have a new data structure for it:
+data Prod x y = Prod !x !y
+instance (Multiplicative x, Multiplicative y) => Multiplicative (Prod x y) where
+Prod x1 y1 * Prod x2 y2 = Prod (x1 * x2) (y1 * y2)
+
+12
+
+

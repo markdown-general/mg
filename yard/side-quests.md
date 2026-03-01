@@ -55,5 +55,13 @@ Unclear what's in log/. Audit and triage contents. Determine what should be kept
 
 pi-mono repository may hold clues for implementing agent spinning in pi. Research and cross-reference with yard/log/ agent spin research files.
 
+## TODO: browser skill form input/submission
+
+**Current tech limit identified**: CDP tools (browser-tools) can **read** page content reliably (browser-content.js, browser-eval.js for DOM extraction). Can **navigate** (browser-nav.js). Cannot reliably **write to forms** or trigger form submission (contenteditable inputs, complex event handling for chat UIs).
+
+Attempted: Grok/Claude.ai chat message submission via CDP KeyboardEvent + form input. Failed on both—events don't fire correctly.
+
+**Next**: Research form recognition + submission patterns. Look for existing form-filler libraries (Puppeteer plugins, CDP form automation, or pi-mono examples). Goal: enable live chat automation for research queries (Grok, Claude.ai).
+
 ---
 
