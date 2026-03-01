@@ -39,6 +39,18 @@ anal, apps, calculational, claude-code-showcase, claude-md-skill, distributors, 
 - Fix broken Hugo site (~/site/)
 - Verify all Haskell project dependencies still resolve
 
+## Final consolidation
+
+Moved 14 remaining Haskell libraries from ~/repos/ to ~/haskell/:
+anal, calculational, dotparse, eulerproject, formatn, grepl, hcount, huihua, markup-parse, perf, poker-fold, repl-viewport, synthesis, web-rep
+
+Deleted loose .hs files: Para.hs, ToHypH (4).hs
+
+**Final counts**:
+- ~/haskell/: 34 Haskell libraries (consolidated)
+- ~/repos/: 3 items (claude-code-showcase, claude-md-skill, ephemeral)
+- ~/other/: 16 items (external refs, dependencies)
+
 ## Git history
 
 All repositories preserved with full history (used `mv`, not `cp`).
