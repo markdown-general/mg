@@ -63,5 +63,19 @@ Attempted: Grok/Claude.ai chat message submission via CDP KeyboardEvent + form i
 
 **Next**: Research form recognition + submission patterns. Look for existing form-filler libraries (Puppeteer plugins, CDP form automation, or pi-mono examples). Goal: enable live chat automation for research queries (Grok, Claude.ai).
 
+## TODO: pi session migration before directory rename
+
+**Discovery**: pi sessions are stored locally per working directory. `/tree` and `/fork` only show sessions from the directory where pi was started.
+
+**Problem**: Before renaming `~/markdown-general` → `~/mg`, we need to migrate existing sessions or understand how they're indexed.
+
+**Need to find**:
+1. Where pi stores sessions (probably `~/.pi/agent/sessions/` with directory hash)
+2. How directory is hashed/referenced in session metadata
+3. Whether we can manually move sessions to new location or if index needs updating
+4. Check SessionManager API in pi-mono (packages/coding-agent/src/core/session-manager.ts)
+
+**Blocker**: Don't rename markdown-general until we know how to preserve session continuity.
+
 ---
 
