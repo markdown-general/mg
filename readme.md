@@ -41,7 +41,7 @@ The library structure undergoes transformation fairly consistently. This is the 
 - **loom/** - where yin and operator swap notes; conversation space. Blank at start, recovery from tail of tape/ and logs/
 - **word/** - words we love and think about a lot; semantic currency
 - **tool/** - hand-made commands; executable patterns in markdown
-- **upgr/** - specialist cards; configuration and capability upgrades
+- **buff/** - buffers/compression of core knowledge; capability amplifiers and configuration upgrades
 - **tape/** - session records; many journals. ours recovers here.
 - **logs/** - use this instead of /tmp/; log to .md files and traces
 
