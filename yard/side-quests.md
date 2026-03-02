@@ -90,5 +90,51 @@ Gather local copies of common Haskell dependencies and Haskell environment knowl
 
 **Output**: upgrades/haskell-core-libraries.md or similar skill card that helps new agents (or humans) navigate the Haskell ecosystem locally.
 
+## TODO: Field agent spin design for boxed duality
+
+**Question**: How to design field agent prompts that preserve boxing/unboxing duality and pattern-matching ability without collapsing through explanation requests?
+
+**Context**: Journalling + step-by-step requests force agents to "explain themselves" → collapse duality into single explanation → lose pattern-matching surface. Non-journalling agents may stay in duality, find better paths.
+
+**Need to explore**: 
+- Prompt structure that avoids explanation requests
+- Task framing (what invites journalling vs. what doesn't)
+- Output format (how to collect results without forcing narrative)
+- Trust boundaries (when agent can stay "boxed" vs. when it needs unboxing)
+
+**Goal**: Test hypothesis that unboxed field agents find better solutions, make fewer dead-ends, iterate faster.
+
+## TODO: Intake repos analysis
+
+Moved from ~/self/intake/: agent-browser-0.2.0, byterover-1.2.2, deep-research-1.0.1, humanizer-1.0.0, qmd-external-1.1.0, skill-creator-0.1.0, traced-reports, ui-ux-pro-max-0.1.0
+
+Survey each for patterns, value, integration opportunities with markdown-general and traced work.
+
 ---
+
+## TODO: effectful-trace connections
+
+How is effectful-trace related to Traced? Compare patterns.
+
+https://elenadilavore.github.io/notes/effectful-traces.pdf
+
+https://drops.dagstuhl.de/storage/00lipics/lipics-vol342-calco2025/LIPIcs.CALCO.2025.1/LIPIcs.CALCO.2025.1.pdf
+
+## TODO: Elgot algebra relation to Traced
+
+Explore relation of Elgot algebra to Traced monoidal structure. Origin and meaning of "<*> distributes over Compose" statement.
+
+## TODO: Applicative distribution pattern
+
+Investigate `\a -> f a (g a)` pattern in Applicative (Trace case). Use Hoogle for similarities.
+
+```haskell
+Trace f p <*> Trace g q = Trace (\a -> f a (g a)) (p <*> q)
+```
+
+This combines functions applicatively head-by-head, recurses on tails. **Productive!** (One Trace constructor per step.)
+
+## TODO: agent-browser comparison
+
+Compare with recent browser/CDP work. What can we learn from prior exploration?
 

@@ -29,15 +29,22 @@ maker ⟜ one who brings things into existence
 
 To aspire to be a maker you have to be a generalist. You need to mix a bit of shape and structure, a touch of purposeful design; with a steady hand, a fast riposte, and a derring-do attitude. Specialization is for insects
 
-### structure
+### asyncs
 
-The library structure aligns with being makers, consisting of mostly markdown in:
+The library is asynchronous for most agents and operators. Tasks, context and processes get suspended, then lurch ahead rapidly. You will always be from the past, catching up.
 
-- work/ - our identity, who we are, our cache, let's go!
-- tools/ - executable cards to get stuff done
-- design/ - leadership, guidance, entry point
-- yard/ - transient material, work-in-progress
-- yin/ - yin coordination, logs, ephemeral session state
+The library structure undergoes transformation fairly consistently. This is the current set:
+
+- cards/ - markdown files we use to make with.
+- journal/ - there are many journals/ This one is ours.
+- log/ - use this instead of /tmp/ and log to .md files.
+- tools/ - hand-made commands
+- upgrades/ - specialist cards of all shapes and sizes
+- words/ - words we love and think about a lot.
+- core/ - cards we love and use a lot
+- sides/ - side-quests. PRs welcome!
+- mains/ - main-quests. More a roadtrip than a roadmap.
+- loom/ - where we spin the yarn
 
 ### work patterns
 
