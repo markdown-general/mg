@@ -35,16 +35,15 @@ The library is asynchronous for most agents and operators. Tasks, context and pr
 
 The library structure undergoes transformation fairly consistently. This is the current set:
 
-- cards/ - markdown files we use to make with.
-- journal/ - there are many journals/ This one is ours.
-- log/ - use this instead of /tmp/ and log to .md files.
-- tools/ - hand-made commands
-- upgrades/ - specialist cards of all shapes and sizes
-- words/ - words we love and think about a lot.
-- core/ - cards we love and use a lot
-- sides/ - side-quests. PRs welcome!
-- mains/ - main-quests. More a roadtrip than a roadmap.
-- loom/ - where we spin the yarn
+- **core/** - foundational patterns you work on constantly; canonical cards for pattern recognition
+- **side/** - active side-quests; ephemeral work, tasks, and experiments. PRs welcome!
+- **main/** - main-quests and strategic projects; deep work with structure. More a roadtrip than a roadmap.
+- **loom/** - where yin and operator swap notes; conversation space. Blank at start, recovery from tail of tape/ and logs/
+- **word/** - words we love and think about a lot; semantic currency
+- **tool/** - hand-made commands; executable patterns in markdown
+- **upgr/** - specialist cards; configuration and capability upgrades
+- **tape/** - session records; many journals. ours recovers here.
+- **logs/** - use this instead of /tmp/; log to .md files and traces
 
 ### work patterns
 
@@ -80,8 +79,8 @@ How's context now?
 **You Got This** - You're primed. Go grind. Trust emergence. Wish we had your confidence.
 **If you're uncertain:** Ask. Grab a seat. Follow a lead. The conversation is content too.
 **readme.md** are indexes of directory contents and can be useful in a rush. keep them neat and tidy!
-**work/ is context:** pick the closest card to your pattern hole. Need to know what a card is? read [card.md](card.md). Been asked to update a tool? look for [tools.md](tools.md). Asked to make a range deck, a pattern might be in [deck.md](deck.md). Noticing drift? check [drift.md](drift.md).
-**tools/ is context too** you can look and use stuff in tools/, executable patterns.
+**core/ is context:** pick the closest card to your pattern hole. Need to know what a card is? read [card.md](core/card.md). Been asked to update a tool? look for [tools.md](core/tools.md). Asked to make a range deck, a pattern might be in [decking.md](core/decking.md). Noticing drift? check [drift.md](core/drift.md).
+**tool/ is context too** you can look and use stuff in tool/, executable patterns.
 
 ## what you can actually do
 
@@ -93,16 +92,16 @@ Commit when asked. One line messages. Present tense. No branding.
 
 ## where to go
 
-card.md ⟜ what we call a markdown file
-tools.md ⟜ how markdown becomes executable
-tools/cache.md ⟜ how we handoff context
-deck.md ⟜ a shape we like to work with.
-code.md ⟜ how we write code
-lattice.md ⟜ another shape, like a table in markdown
-reflect.md  ⟜ if in doubt, reflect on out.
-breathe.md ⟜ a breathing space in our mudball
-yin.md ⟜ yin coordination, flow ⊙ work ⊙ breathe cycle
-drift.md ⟜ semantic drift detection, recovery, and reestablishing state
+**core/yin.md** ⟜ read every time on startup; yin coordination, flow ⊙ work ⊙ breathe cycle
+**core/card.md** ⟜ what we call a markdown file
+**core/tools.md** ⟜ how markdown becomes executable
+**tool/cache.md** ⟜ how we handoff context
+**core/decking.md** ⟜ a shape we like to work with.
+**core/coding.md** ⟜ how we write code
+**core/lattice.md** ⟜ another shape, like a table in markdown
+**core/reflect.md** ⟜ if in doubt, reflect on out.
+**word/breathe.md** ⟜ a breathing space in our mudball
+**core/drift.md** ⟜ semantic drift detection, recovery, and reestablishing state
 
 ## Agents 
 
@@ -141,15 +140,15 @@ There's a lot of ways you can get comfy with markdown-general.
 
 ### **getting started**
 
-**1. drop a card in chat** ⟜ paste any card in work and chat with an AI about it
-**2. drop in an agentic** ⟜ let a field agent guide you through ~/work.
+**1. drop a card in chat** ⟜ paste any card from core/ and chat with an AI about it
+**2. drop in an agentic** ⟜ let a field agent guide you through ~/mg/core.
 **3. explore naturally** ⟜ follow system suggestions and patterns
 **4. start on a pattern** ⟜ find typos, design, do experiments, pattern some code, be general
 
 ### **next steps**
 
-**read our guides** ⟜ follow the work/ trails or venture offtrack into the yard/
-**make it make sense** ⟜ take a [breathe](breathe).
+**read our guides** ⟜ follow the core/ trails or venture offtrack into main/ or side/
+**make it make sense** ⟜ take a [breathe](word/breathe.md).
 **make a commit** ⟜ as you look around, help us tidy up a bit.
 **sign our visitor book** ⟜ hope you enjoyed our little place, compacts every Friday.
 
