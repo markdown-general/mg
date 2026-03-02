@@ -68,6 +68,39 @@ provider APIs (Anthropic, OpenAI, Google, etc.)
 
 ---
 
+## tree browser (upcoming feature)
+
+**What it does**: Visual session and conversation tree navigation in Emacs buffers, replacing modal completers with always-visible browsers.
+
+**Status**: Feature branch `rpc-browsing-surface` (dnouri/pi-mono) paired with `browser` branch (dnouri/pi-coding-agent). Not yet on main.
+
+**Session Browser** (`C-c C-r` in Emacs):
+- Browse all sessions or current project scope
+- Sort modes: threaded (shows fork lineage with tree connectors), recent, relevance
+- Filter to named-only sessions, toggle scope, search with `/`
+- Rename active session with `r`
+- Right margin displays message count and age
+- Point-based navigation via magit-section
+
+**Tree Browser** (`C-c C-p` then `w` in Emacs):
+- Visual branch structure of current conversation
+- Active path highlighted; abandoned branches dimmed
+- Five filter modes (cycle with `f`): no-tools (default), default, user-only, labeled-only, all
+- `RET` navigates to branch point; `S` navigates with branch summarization
+- Label nodes with `l`, search with `/`
+- `C-c C-k` aborts in-flight summarization
+- Help menu with `?` or `h`
+
+**Local installation**:
+- `~/other/pi-mono` checked out to `rpc-browsing-surface` branch
+- `~/other/pi-coding-agent` checked out to `browser` branch
+- Built and installed globally: `npm install -g ./packages/coding-agent`
+- Doom config points to local pi-coding-agent via `:local-repo` in packages.el
+
+**Integration notes**: Both buffers use magit-section for point-centric dispatch. Requires new RPC commands (list_sessions, get_tree, navigate_tree, set_label, abort_branch_summary) now on rpc-browsing-surface. Once merged to main, revert to standard npm install and remove local branches.
+
+---
+
 ## markdown-general integration
 
 pi-mono's philosophy mirrors markdown-general's:
