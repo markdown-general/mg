@@ -9,42 +9,48 @@
 ## example
 
 ```bash
-cd ~/markdown-general/content
-cache flatten --output ../test-cache.md
+cd ~/mg/core
+cache flatten --output ../cache-core.md
 # defaults to current directory.
 
-cache split test-cache.md --output-dir ../restored/
+cache split cache-core.md --output-dir ../restored/
 # restored/ will have the same markdown files as 
-# test-cache.md wraps (which was content/)
+# cache-core.md wraps (which was core/)
 # diff -r . ../restored/
 
-cd ~/markdown-general
+cd ~/mg
 cache flatten
-# outputs ~/markdown-general-cache/cache-sisyphus-260106.md
+# outputs ~/mg-cache/cache-mg-260306.md
 ```
 
 ## file priorities
 
 When caching (throwing mudballs at chat AIs or agents), write order matters for context alignment.
 
-**Priority ordering** ⟜ important files first, rest alphabetically
+**Priority ordering** ⟜ core/ first (canonical patterns), then buff|loom|main|side|word|tool in order, remaining files alphabetically
 
-**work/welcome.md** ⟜ entry point and orientation
-**work/markdown.md** ⟜ shared medium definition
-**work/general.md** ⟜ operational stance and attitude
-**work/cast.md** ⟜ defunctionalization and making executable
-**work/pattern.md** ⟜ seeing and making patterns
-**work/grind.md** ⟜ practice of improvement
-**work/card.md** ⟜ executable markdown structure
-**work/tools.md** ⟜ tool ecosystem
-**work/cache.md** ⟜ why we cache and hand context
-**work/deck.md** ⟜ notation system used everywhere
-**work/lattice.md** ⟜ paired deck structures
-**work/sisyphus.md** ⟜ why and what of this place
-**work/task.md** ⟜ task structure and organization
-**work/upstream.md** ⟜ async todo management
+**core/yin.md** ⟜ flow ⊙ work ⊙ breathe cycle; read on startup
+**core/card.md** ⟜ executable markdown structure; what we call a card
+**core/tools.md** ⟜ tool ecosystem and integration
+**core/drift.md** ⟜ semantic drift detection and recovery
+**core/coding.md** ⟜ how we write code
+**core/decking.md** ⟜ notation systems we use
+**core/lattice.md** ⟜ paired structures and tables
+**core/reflect.md** ⟜ reflection patterns
 
-**Remaining files** ⟜ alphabetical order after priorities
+**buff/** ⟜ capability upgrades and buffers, alphabetically
+
+**loom/** ⟜ conversation space and collaborative notes, alphabetically
+
+**main/** ⟜ strategic deep projects, alphabetically
+
+**side/** ⟜ active experiments and side-quests, alphabetically
+
+**word/** ⟜ semantic currency and concepts, alphabetically
+
+**tool/** ⟜ executable patterns and commands, alphabetically
+
+**Remaining files** ⟜ alphabetical order after directory-ordered priorities
 
 ## api
 
@@ -52,10 +58,10 @@ When caching (throwing mudballs at chat AIs or agents), write order matters for 
 
 **Smart Defaults:**
 - `--include "**/*"` (all files)
-- `--exclude "cache-*.md" "artifacts/**" "content/self/**" "content/blog/**" "content/upstream/**" "org/**"`
+- `--exclude "cache-*.md" "logs/**" "tape/**"`
 - `--dir .` (current directory)
 - `--recursive` (default true)
-- `--cache-dir ~/markdown-general-cache/`
+- `--cache-dir ~/mg-cache/`
 - `--output` auto-generated as `cache-<dir>-YYMMDD.md`
 
 **Options:**
@@ -81,17 +87,17 @@ When caching (throwing mudballs at chat AIs or agents), write order matters for 
 
 ## installation
 
-**Location:** `~/markdown-general/artifacts/bin/cache`
+**Location:** `~/mg/tool/cache`
 
 **Wrapper:**
 ```bash
 #!/bin/bash
-awk '/^```python$/{p=1;next} /^```$/{if(p)exit} p' ~/markdown-general/tools/cache.md | python3 - "$@"
+awk '/^```python$/{p=1;next} /^```$/{if(p)exit} p' ~/mg/tool/cache.md | python3 - "$@"
 ```
 
 **One-liner test:**
 ```bash
-cache flatten --dir ~/markdown-general/tools --dry-run | head -3
+cache flatten --dir ~/mg/core --dry-run | head -3
 ```
 
 ## tips
@@ -113,14 +119,16 @@ cache flatten --dir ~/markdown-general/tools --dry-run | head -3
 ## status
 
 **Tests:** passing (round-trip, binary rejection, exclude patterns)
-**Last updated:** 2026-01-06
+**Last updated:** 2026-03-06
 **Session cost:** $0.88
 **Known issues:** None
 
 **Recent fixes:**
-- Fixed auto-naming: now uses directory name instead of "current"
-- Fixed exclude pattern matching: patterns now work against relative paths
-- Fixed awk-based extraction: handles first Python block correctly
+- Updated priority ordering: core/ canonical patterns first, then buff|loom|main|side|word|tool
+- Updated paths: ~/markdown-general → ~/mg
+- Updated cache-dir default: ~/mg-cache/
+- Updated exclusions: removed obsolete paths, exclude logs/ and tape/ as specified
+- Removed work/ directory references; now follows core/ structure
 
 ## code
 
@@ -139,22 +147,16 @@ import fnmatch
 from datetime import datetime
 import sys
 
-# Priority ordering for work/ files
+# Priority ordering for core/ canonical patterns, then buff|loom|main|side|word|tool
 PRIORITY_FILES = [
-    "work/welcome.md",
-    "work/markdown.md",
-    "work/general.md",
-    "work/cast.md",
-    "work/pattern.md",
-    "work/grind.md",
-    "work/card.md",
-    "work/tools.md",
-    "work/cache.md",
-    "work/deck.md",
-    "work/lattice.md",
-    "work/sisyphus.md",
-    "work/task.md",
-    "work/upstream.md",
+    "core/yin.md",
+    "core/card.md",
+    "core/tools.md",
+    "core/drift.md",
+    "core/coding.md",
+    "core/decking.md",
+    "core/lattice.md",
+    "core/reflect.md",
 ]
 
 def sort_by_priority(files, base_dir):
@@ -236,15 +238,12 @@ def apply_smart_defaults(options):
         # Common cache exclusions
         options.exclude = [
             "cache-*.md",
-            "artifacts/**",
-            "content/self/**",
-            "content/blog/**",
-            "content/upstream/**",
-            "org/**"
+            "logs/**",
+            "tape/**"
         ]
 
     if not options.cache_dir:
-        options.cache_dir = Path.home() / "sisyphus-cache"
+        options.cache_dir = Path.home() / "mg-cache"
 
     if not options.output:
         options.output = generate_auto_name(options.dir, options.cache_dir)
@@ -451,31 +450,27 @@ if __name__ == "__main__":
 
 ## examples
 
-### content-only cache
+### core-only cache
 
-Clean content cache, no experiments or artifacts:
+Core canonical patterns only, ready for design chat:
 
 ```bash
-cd ~/markdown-general
+cd ~/mg
 cache flatten \
-  --include "work/**/*.md" \
-  --include "zone/upgrades/**/*.md" \
-  --exclude "content/self/**" \
-  --exclude "content/blog/**" \
-  --output cache-priority-zero.md
+  --include "core/**/*.md" \
+  --output cache-core-canonical.md
 ```
 
-### specialist cache
+### core + buff cache
 
-Haskell development cache with only Haskell files:
+Core patterns plus capability upgrades:
 
 ```bash
+cd ~/mg
 cache flatten \
-  --include "**/*.hs" \
-  --include "**/*.cabal" \
-  --include "work/haskell.md" \
-  --exclude "test/**" \
-  --output cache-haskell-specialist.md
+  --include "core/**/*.md" \
+  --include "buff/**/*.md" \
+  --output cache-core-buffed.md
 ```
 
 ### dry-run preview
@@ -483,7 +478,8 @@ cache flatten \
 Preview what would be included without creating output:
 
 ```bash
-cache flatten --include "**/*.md" --exclude "artifacts/**" --dry-run
+cd ~/mg
+cache flatten --include "**/*.md" --dry-run | head -20
 ```
 
 ## tests
@@ -532,20 +528,22 @@ rm -rf /tmp/cache-binary /tmp/binary-test.md
 
 ### exclude patterns
 
-Verify smart defaults and explicit exclusions work:
+Verify smart defaults exclude logs/ and tape/, include core/:
 
 ```bash
-mkdir -p /tmp/cache-exclude/{artifacts,content}
-echo "# Keep" > /tmp/cache-exclude/content/keep.md
-echo "# Skip" > /tmp/cache-exclude/artifacts/skip.md
-echo "# Skip cache" > /tmp/cache-exclude/cache-old.md
+mkdir -p /tmp/cache-exclude/{core,logs,tape}
+echo "# Core pattern" > /tmp/cache-exclude/core/pattern.md
+echo "# Log entry" > /tmp/cache-exclude/logs/session.md
+echo "# Tape record" > /tmp/cache-exclude/tape/record.md
+echo "# Cache file" > /tmp/cache-exclude/cache-old.md
 
 # Create cache with defaults
 cache flatten --dir /tmp/cache-exclude --output /tmp/exclude-test.md
 
 # Verify exclusions
-grep "FILE: content/keep.md" /tmp/exclude-test.md > /dev/null && echo "✓ Content included"
-grep "FILE: artifacts/skip.md" /tmp/exclude-test.md > /dev/null || echo "✓ Artifacts excluded"
+grep "FILE: core/pattern.md" /tmp/exclude-test.md > /dev/null && echo "✓ Core included"
+grep "FILE: logs/session.md" /tmp/exclude-test.md > /dev/null || echo "✓ Logs excluded"
+grep "FILE: tape/record.md" /tmp/exclude-test.md > /dev/null || echo "✓ Tape excluded"
 grep "FILE: cache-old.md" /tmp/exclude-test.md > /dev/null || echo "✓ Cache files excluded"
 
 # Cleanup

@@ -1,3 +1,0 @@
-uiua
-tristero
-ephemeral

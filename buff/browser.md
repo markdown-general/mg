@@ -74,7 +74,7 @@ node browser-eval.js "(function() {
 
 ## known limitations
 
-**Form submission** ⚠️ Writing to chat inputs + triggering submission doesn't work reliably yet. Side-quest: form recognition library.
+**Form submission** ✓ Solved — paste via `element.innerText = text` (not keyboard.type), wait 2-3s after page load before interacting, click send button. Per-system quirks documented in `~/mg/buff/browser-comms.md`.
 
 **Authentication** ⚠️ Gmail/Grok require live login. Use `--profile` to copy your Chrome profile (preserves cookies). Full email content requires CDP navigation to specific message.
 

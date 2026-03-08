@@ -12,7 +12,7 @@ With flow, you place symbols within the prose of a card that describes the traje
 
 **action** ⟜ the work itself
 ```
-⊢ action ⊣
+⊢ action
 ```
 
 **queries** ⟜ what's unknown, what needs agreement
@@ -37,7 +37,7 @@ With flow, you place symbols within the prose of a card that describes the traje
 
 **marks** ⟜ anchors for jumping back or forward (superscript numbers)
 ```
-⊢ action ⊣¹
+⊢ action¹
 ...
 ⊲¹ go back to action
 ```
@@ -50,6 +50,11 @@ With flow, you place symbols within the prose of a card that describes the traje
 **branch point** ⟜ a potential point where the trajectory may diverge.
 ```
 ⬡
+```
+
+**data checkpoint** ⟜ state or decision captured and may need future reverification
+```
+◆ data point captured
 ```
 
 **branch symbols** ⟜ types of continuation after an action
@@ -66,7 +71,7 @@ With flow, you place symbols within the prose of a card that describes the traje
 ## what it looks like
 
 ```
-⊢ dashboard R&D ⊣¹ ◊ ⬡
+⊢ dashboard R&D¹ ◊ ⬡
   ⟜ create [dashboard](dashboard.md)
   ⋆ revise to a [console-based system]
   ⊲¹ go back and rethink the system

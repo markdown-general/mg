@@ -1,129 +1,250 @@
-# emacs environment and practices
+# emacs ⟡ our setup
 
-## pi-coding-agent: Native Emacs Frontend for Pi
+---
 
-**pi-coding-agent** is an Emacs frontend for the pi coding agent, providing native integration without wrapper protocols or APIs.
+## inventory
 
-### Why pi-coding-agent?
+### doom baseline
 
-- **Native Emacs workflow**: Compose prompts in full Emacs buffers with all your keybindings and editing power
-- **Markdown chat history**: Conversations saved as native Markdown files—searchable, editable, resumable
-- **Direct Pi integration**: No API layers, wrappers, or protocols; runs pi CLI directly
-- **Streaming output**: Watch tool operations and command execution in real-time
-- **Forking conversations**: Branch at any point in the chat history
-- **File references**: Use `@` to search and reference project files directly in prompts
-- **Multi-session**: Run multiple conversations per project, named or default
+Minimal, vanilla-close Doom Emacs configuration. Active modules:
 
-### Setup
+**UI/Completion:**
+- vertico (search engine)
+- company (code completion)
+- doom-dashboard (splash)
+- modeline (Doom aesthetic)
+- ligatures (iosevka + extra)
+- window-select, popup
 
-**Installation (Doom Emacs):**
+**Editor:**
+- evil (vim everywhere)
+- dired (file browsing)
+- undo (persistent)
+- vc (git)
 
-In `packages.el`:
-```elisp
-(package! pi-coding-agent)
-```
+**Tools:**
+- lookup (documentation navigation)
+- lsp (language servers)
+- magit (git porcelain)
+- tree-sitter (syntax, parsing)
+- eshell, shell (terminals)
+- eval + overlay (run code inline)
 
-In `config.el`:
-```elisp
-(use-package! pi-coding-agent
-  :init (defalias 'pi 'pi-coding-agent))
-```
+**Languages:**
+- emacs-lisp, markdown, latex, org (+pomodoro), sh, yaml
+- haskell (via haskell-lite; see below)
 
-Then run `doom sync` and restart Emacs.
+**Checkers:**
+- syntax, spell
 
-**Requirements:**
-- Emacs 28.1 or later
-- pi coding agent 0.51.3+ installed and in PATH (`which pi`)
+**OS:**
+- macos
 
-### Usage
+---
 
-**Start a session:**
-```
-M-x pi
-```
+## haskell-lite ⟜ integrated workflow
 
-The interface opens two buffers:
-- **Chat buffer** (top): Conversation history as rendered Markdown
-- **Input buffer** (bottom): Where you compose prompts
+Consolidated Haskell development environment. Three packages working together:
 
-Type your prompt and press `C-c C-c` to send.
+**Core:**
+- `haskell-lite` (github.com/tonyday567/haskell-lite) ⟜ REPL + evaluation overlay (eros.el derived)
+- `haskell-ng-mode` (gitlab.com/tonyday567/haskell-ng-mode, lite-fixes) ⟜ Tree-sitter major mode, replaces haskell-mode
+- `lsp-haskell` (github.com/magthe/lsp-haskell) ⟜ Language Server Protocol bridge to HLS
 
-### Key Bindings
+**State:** Solid code, library sync broken. All three are functional but got knocked out of alignment in recent refactor.
 
-| Key           | Action                                  |
-|---------------+-----------------------------------------|
-| `C-c C-c`     | Send prompt                             |
-| `C-c C-s`     | Queue steering message (while busy)     |
-| `C-c C-k`     | Abort streaming                         |
-| `C-c C-p`     | Open menu (model, thinking, sessions)   |
-| `C-c C-r`     | Resume session                          |
-| `M-p` / `M-n` | Navigate input history                  |
-| `C-r`         | Incremental history search              |
-| `TAB`         | Complete paths, files, commands         |
-| `@`           | File reference search                   |
-| `n` / `p`     | Navigate messages in chat               |
-| `f`           | Fork conversation at point              |
-| `q`           | Quit session                            |
-| `S-TAB`       | Cycle fold state for all sections       |
+⊢ haskell-lite consolidation ◊
+  [best practices review] — Before merging packages, study emacs library layout
+  ⟜ create stand-alone branch (ready)
+  ⟜ copy haskell-ng-mode + lsp-haskell into stand-alone
+  ⟜ retest with `doom sync`
+  ⟜ verify composition (no conflicts, clean seams)
+  ⟜ commit
 
-### Tips & Tricks
+**How it works:**
+1. Major mode (haskell-ng-mode, tree-sitter) for editing
+2. Type info + docs (lsp-haskell → HLS) for IDE features
+3. Interactive dev (haskell-lite REPL + overlay) for exploration
+4. Markdown execution (moving from org-babel to markdown cards)
 
-**Composing Prompts**
-- The input buffer is a full Emacs buffer: multi-line editing, paste from other buffers, use registers, apply macros
-- Your prompt stays put while the AI responds above
-- Slash commands (`/command`) work with completion: type `/` then `TAB`
+**Keybindings:**
 
-**File References**
-- Type `@` to search project files (respects `.gitignore`)
-- Results cached for 30s to keep completion fast
-- Referenced files are sent to pi with full context
+| key        | command                 |
+|------------|-------------------------|
+| `M-n`      | flycheck-next-error     |
+| `M-p`      | flycheck-prev-error     |
+| `SPC m h`  | hoogle-name             |
+| `SPC m p`  | hackage-package         |
+| `SPC m '`  | haskell-ng-repl-run     |
+| `SPC m = =` | ormolu-format-buffer   |
+| `SPC m e e` | eglot                   |
+| `SPC m l l` | lsp                     |
+| `SPC m l r` | lsp-restart             |
+| `SPC m m m` | haskell-lite-repl-overlay |
+| `SPC m m s` | haskell-ng-repl-run     |
+| `SPC m m p` | haskell-lite-prompt     |
+| `SPC m m g` | haskell-lite-run-go     |
+| `SPC m m r` | haskell-lite-repl-restart |
 
-**Tool Output**
-- Collapsed by default to keep chat readable
-- Press `TAB` on tool blocks to expand
-- File operations (read, write, edit) show syntax highlighting
-- Diffs highlight what changed
-- Press `RET` on file-content lines to open backing file at line number
+See ~/self/buff/haskell-lite.md for full workflow details.
 
-**Session Management**
-- Each project directory gets one default session automatically
-- For multiple sessions in same directory: `C-u M-x pi-coding-agent` to name
-- Resume (from menu): restore previous session or fork from earlier message
-- Chat history persists as Markdown files
+---
 
-**Folding**
-- Press `TAB` on turn headers (You/Assistant) to fold
-- Use `S-TAB` to cycle visibility of all turns at once
+## pi-coding-agent ⟜ multi-agent session interface
 
-### Emacs Integration
+**Keybinding:** `C-c C-p`
 
-Because pi-coding-agent runs in Emacs buffers, you have access to:
-- Current buffer content (pi can read/analyze what you're editing)
-- File references via `@` completion
-- Emacs keybindings and editing power
-- Full Markdown formatting support for documentation
-- Native git integration (pi sees git context)
-- LSP diagnostics and editor state
+Multi-turn agentic development in Emacs. Sessions are immutable `.jsonl` streams with branching.
 
-### Troubleshooting
+**Core idea:**
+- Sessions have id/parentId structure (DAG)
+- Fork at any point to spawn parallel conversations
+- Use case: Get 5 different opinions on the same code problem in parallel, from one session root
 
-**pi-coding-agent not starting?**
-- Verify pi is in PATH: `which pi`
-- Check Emacs messages: `M-x toggle-debug-on-error`
-- Verify Emacs version: `M-x emacs-version` (needs 28.1+)
+⊢ pi-keymap integration ◊
+  Current state: SPC y menu (which-key) is broken/unused
+  [verify need] — Is SPC y menu actually desired, or is C-c C-p sufficient?
+  ⋆ repair and test which-key groups (7 groups × 34 bindings)
+  ⋆ deprecate SPC y entirely, stick with C-c C-p + transient menu
 
-**Session lost?**
-- Chat files are saved to disk as Markdown
-- Look in `~/.pi/` for session history
-- Use `C-c C-r` to resume or `C-c C-p` menu to restore
+**Working memory for agents:**
 
-**Slow completion?**
-- File reference cache refreshes every 30s
-- Can be forced by waiting or switching files
+When agents read this card on entry, they should know:
 
-### Links
+1. **Where things are** ⟜ Keybindings are context-specific (see below). Custom packages live in ~/.config/doom/packages.el. Config is ~/.config/doom/config.el.
+2. **How to reach code** ⟜ Haskell: C-c C-p for multi-turn dev. Elisp: Same. Navigation: `SPC s f` (find), `SPC s o` (outline), `SPC b o` (buffer).
+3. **Type/doc lookup** ⟜ Haskell: `SPC m h` (hoogle), `SPC m p` (hackage). Elisp: built-in help. LSP: `SPC m e e` (eglot).
+4. **Eval/test** ⟜ Haskell: `SPC m '` REPL or overlay. Elisp: `C-c C-e`, `M-x ert`.
+5. **Pair flow** ⟜ Use pi-coding-agent for refinement loops. Session branching explores alternatives without losing context.
 
-- [pi-coding-agent on GitHub](https://github.com/dnouri/pi-coding-agent)
-- [pi-coding-agent on MELPA](https://melpa.org/#/pi-coding-agent)
-- [pi coding agent](https://github.com/badlogic/pi-mono)
-- [Doom Emacs](https://github.com/doomemacs/doomemacs)
+---
+
+## recent R&D (March 2026)
+
+**Landscape:** Agent integration in Emacs is rapidly evolving.
+
+**Trending:**
+- `agent-shell` (143⭐) ⟜ Native ACP agent interface (Claude Code, Gemini CLI)
+- `gptel` (83⭐, by karthink) ⟜ Extensible LLM client, shifted to "programmable agents via APIs"
+- `claude-code.el` (71⭐) ⟜ IDE pair programming, strong REPL-bridge work
+- `gptel-agent` (46⭐) ⟜ Agent wrapper with presets
+
+**Patterns:**
+- **Sub-agent spawning** (like pi-coding-agent) is not yet widespread. Most packages focus on single-agent chat or tool-calling loops.
+- **REPL-agent fusion** (interactive eval + agentic flow) is emerging but immature. No canonical pattern yet.
+- **MCP (Model Context Protocol)** becoming integration seam. Karthink views it as bridge for tool orchestration.
+
+**Pain points:**
+- Context management (multi-modal, per-buffer contexts)
+- Tool/agent orchestration (MCP errors, tool call IDs)
+- Workflow clarity (when to use agents vs simple LLM queries)
+
+**Our position:**
+- We use pi-coding-agent (jsonl session branching, not MCP)
+- Our ethos: cards + emacs working memory, not protocols
+- Haskell vision (REPL + overlay + markdown) is ahead of ecosystem
+
+---
+
+## MCP reference (future)
+
+If we need to expose Emacs as tool to external agents, these libraries are worth studying:
+
+**elisp-dev-mcp** (github.com/laurynas-biveinski/elisp-dev-mcp)
+- Stdio-based MCP server for Elisp introspection
+- Tools: get-function-definition, get-variable-definition, info-lookup-symbol, eval-expression
+- Security: Restricts file reads to load-path + custom dirs, rejects .. paths
+- Pattern: Tool handlers via `(mcp-register-tool "name" "desc" handler)`, return JSON or error
+
+**emacs-mcp** (github.com/mpontus/emacs-mcp)
+- Introspection server (packages, functions, keybindings, docs)
+- Loads user init on startup (--batch mode) for accuracy
+- Config via mcp.json, Doom bootstrap script
+- Use case: Claude Code agent with live Emacs context
+
+Both are stdio, synchronous, minimal. Study only if/when we need MCP hookup.
+
+---
+
+## keybindings
+
+Organized by context. Most follow Doom convention: `SPC` (leader) + `m` (major mode) + context char.
+
+### global
+
+| key       | command                     |
+|-----------|-------------------------------------|
+| `v` `V`   | expand/contract region      |
+| `SPC s o` | consult-outline             |
+| `SPC s f` | consult-find                |
+| `SPC s y` | consult-yank-from-kill-ring |
+| `SPC b o` | consult-buffer-other-window |
+| `SPC r l` | consult-register-load       |
+| `SPC r s` | consult-register-store      |
+| `SPC r r` | consult-register            |
+| `M-SPC`   | cycle-spacing               |
+| `SPC t m` | style/max-frame             |
+| `SPC t d` | style/default-frame         |
+| `gss`     | evil-avy-goto-char-timer    |
+| `gs/`     | evil-avy-goto-char-2        |
+| `C-r`     | isearch-backwards           |
+| `M-s-s`   | isearch-forward-regexp      |
+| `M-j`     | avy-isearch                 |
+| `M-n`     | flycheck-next-error         |
+| `M-p`     | flycheck-previous-error     |
+| `C-c C-p` | pi-coding-agent             |
+
+### markdown
+
+| key         | command                     |
+|-------------|-----------------------------|
+| `v` `V`     | expand/contract region      |
+
+### org-mode
+
+#### agenda
+
+Custom commands:
+- `SPC o z` ⟜ z-agenda (agenda + next + blocked + todo)
+- `SPC o n` ⟜ next agenda (agenda + next todos)
+
+#### yank-into-block
+
+| key        | command                      |
+|------------|------------------------------|
+| `SPC m z b` | org-yank-into-new-block      |
+| `SPC m z e` | org-yank-into-new-block-elisp |
+| `SPC m z s` | org-yank-into-new-block-sh   |
+| `SPC m z h` | org-yank-into-new-block-haskell |
+| `SPC m z n` | org-new-block-haskell        |
+| `SPC m z z` | org-new-block (empty)        |
+| `SPC m z q` | org-yank-into-new-quote      |
+
+---
+
+## config files
+
+- `~/.config/doom/init.el` ⟜ Module declarations
+- `~/.config/doom/config.el` ⟜ Operational config (28K)
+- `~/.config/doom/packages.el` ⟜ Custom package declarations with pins/branches
+
+To modify: Edit .el files, then `doom sync && doom build`.
+
+---
+
+## maintenance
+
+**compat pin:** `(package! compat :pin "9a234d0")` ⟜ Fixes transient/magit compatibility issue (doomemacs#8089: "Error in pre-command-hook (transient--pre-command)"). Pinned to specific commit to avoid Emacs downgrade issues.
+
+**Performance:** lsp, tree-sitter are heavy. Monitor startup time.
+
+**Dead code:** SPC y menu is unused. Remove or repair? (See pi-keymap integration note above.)
+
+---
+
+## next
+
+⊢ haskell-lite consolidation ◊ (in progress, pending review)
+⊢ pi-keymap decision ◊ (broken, needs direction)
+⟜ watch MCP maturity (informational only)
+⟜ explore markdown-based Haskell execution (sabela/scripths templates)
