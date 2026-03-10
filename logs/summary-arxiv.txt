@@ -1,9 +1,0 @@
-**Duploids: non-associative categories for mixing evaluation strategies** ⟜ When CBV and CBN evaluation coexist, composition becomes non-associative; the paper rehabilitates this as a principled structure for reasoning about effectful programs, with positive and negative shifts encoding the two paradigms.
-
-**Dialogue duploids as models of classical logic** ⟜ Building on adjunctions of self-dual negation functors, dialogue duploids provide symmetric semantic accounts of classical logic via two-sided sequent calculus, bridging continuation models and proof-theoretic perspectives without privileging one evaluation direction.
-
-**The linear classical L-calculus: syntax matching semantics** ⟜ An involutive negation connective and focused reduction rules enable the direct L-calculus to interpret faithfully into dialogue duploids, with equational theory recovering both CBV and CBN as positive/negative subcategories.
-
-**Thunkability = centrality in dialogue duploids (Hasegawa-Thielecke theorem)** ⟜ Two computational notions of "purity"—thunkable maps (substitutable like values) and central maps (commute over parallel compositions)—provably coincide via internal duality, implying continuation monads are commutative iff idempotent.
-
-**Overcoming Joyal's obstruction** ⟜ Rather than abandon cartesian categories or dualizing objects entirely, the work relaxes associativity of composition to preserve symmetry of classical logic while maintaining a computationally meaningful semantics.
