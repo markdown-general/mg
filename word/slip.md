@@ -46,7 +46,7 @@ immediate corrections needed ⟜ excessive generation, premature structure, mind
 
 naming and framing ⟜ operator terminology needs abstraction, deck format flexibility ⟝ develop better human role terminology, adjust deck format definition
 
-context management ⟜ content/invoke/ effects, session state tracking, prompt activation ⟜ create slip detection patterns, establish context boundaries
+context management ⟜ content/invoke/ effects, session state tracking, prompt activation ⟝ create slip detection patterns, establish context boundaries
 
 preventative measures ⟜ early prompting verification, token budget awareness, format suitability assessment ⟝ develop pre-generation checklist, establish slip warning signals
 
