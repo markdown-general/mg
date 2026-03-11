@@ -1,4 +1,4 @@
-# tcat ⟜ cleanup before yarn rename
+# yarn ⟜ cleaned, renamed, ready for ground truth
 
 **Status** ⟜ Post-Log integration; blockers identified, cleanup in progress
 
@@ -200,14 +200,27 @@
   - Why mealy-loop tests were deleted (ArrowLoop Mealy instance missing)
   - When to revisit (Phase 2 of yarn plan, or async work)
   
-## Summary
+## Rename Complete
 
-**Status:** tcat is now clean and ready for yarn transition.
-- Public API: 6 core modules (Traced, Hyp, HypH, Lexer, LexerK, Log)
+✓ **Transition to yarn executed:**
+  - Directory: ~/haskell/tcat → ~/haskell/yarn
+  - GitHub: https://github.com/tonyday567/yarn (created, main pushed)
+  - Cabal file: tcat.cabal → yarn.cabal
+  - Build references: updated (yarn.cabal, build-depends)
+  - Commit: 47d1858 "rename: tcat → yarn"
+  - Pushed to origin/main ✓
+
+## Current State
+
+**✓ Library is clean and ready:**
+- Public API: 10 modules (Hyp, HypH, Traced, Lexer, LexerK, ToHypH, Para, LensS, Net, Log)
 - No test/ directory (all verification is doctests)
+- 29/29 cabal-docspec examples pass
 - No aspirational code (deadlock tests removed)
-- Build clean, cabal-docspec all pass
-- Experimental modules preserved for future triage
+- Build clean, no warnings
+- Located: ~/haskell/yarn (git remote: github.com/tonyday567/yarn)
+
+**Next:** yarn.md Phase 2 (ground truth extraction, invariants, benchmarks, documentation tiers)
 
 ---
 
