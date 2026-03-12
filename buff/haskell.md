@@ -15,6 +15,33 @@ Default choices:
 ⟜ CI workflow: copy from ~/haskell/numhask-space/.github/workflows/haskell-ci.yml
 ⟜ tested-with: GHC 9.14, 9.12, 9.10 (last three versions)
 
+## Import Style
+
+⟜ **Recipe for Prelude conflicts (id, (.))**
+
+When using `Category` or `Arrow` instances:
+
+```haskell
+import Prelude hiding (id, (.))
+import Control.Category (id, (.))
+```
+
+**Why:** `id` and `(.)` from Prelude clash with categorical versions. Hide Prelude's, import Category's explicitly.
+
+⟜ **Development imports: unqualified by default**
+
+Import unqualified during development to catch name clashes for free. Only use `import Prelude qualified` when replacing Prelude entirely (e.g., NumHask).
+
+⟜ **Avoid explicit import list edits**
+
+Don't maintain tight import lists (`import Data.Foo (bar, baz)`). Import unqualified, let the compiler warn on actual namespace conflicts. This avoids cascading bugs from list maintenance.
+
+⟜ **Intent encoding**
+
+- Usually using Prelude? Import unqualified.
+- Replacing Prelude? Import qualified and add qualified imports as needed.
+- Short-lived conflicts? Hide just the clashing names, import the rest unqualified.
+
 ## Agentic Documentation Philosophy
 
 Readme.md and haddocks should be **well-crafted for an agentic landscape**:
@@ -131,3 +158,71 @@ Potential mitigations:
   After upgrading to GHC 9.14, allow-newer constraints should be minimal.
   Goal: Most projects need no allow-newer (or just *:base if still pinned to older deps).
   Survey shows patterns; audit each cabal.project to cut back to defaults.
+  
+## Doctest Skeleton
+
+To add to module docs:
+
+```haskell
+-- | Identity morphism
+-- >>> runFn Pure 42
+-- 42
+--
+-- | Lift a function
+-- >>> runFn (Lift (\x -> x + 1)) 5
+-- 6
+--
+-- | Compose: right runs first
+-- >>> runFn (Compose (Lift (*2)) (Lift (\x -> x + 1))) 5
+-- 12
+--
+-- | Category instance (. and id)
+-- >>> let f = Lift (\x -> x + 1) :: Traced (->) Int Int
+-- >>> let g = Lift (\x -> x * 2) :: Traced (->) Int Int
+-- >>> runFn (f . g) 5
+-- 11
+```
+
+---
+
+## Key Pattern: Composition Order
+
+⚠️ **Critical to remember:**
+
+```
+Compose f g means: apply g first, then apply f to the result
+```
+
+This is **right-to-left** order (standard function composition).
+
+```haskell
+-- BAD intuition: "add then times"
+-- Compose times2 addOne  would mean: addOne then times2
+--                               (5 + 1 = 6, then 6 * 2 = 12)
+
+-- CORRECT: Think of it as (f . g) x = f (g x)
+--          where f = times2, g = addOne
+--          Compose f g = f . g
+```
+
+---
+
+## Keep Implementations, Not Warnings
+
+**Pattern:** Better to keep an unused implementation with a doc comment than delete it to silence a warning.
+
+Implementations are proof. They show *alternative approaches* that may become important later:
+- Reference implementations (e.g., `loop''` as fixed-point form vs. `loop'` as knot-tying)
+- Witness to earlier design decisions
+- Foundation for future bridges or transformations
+
+**Example:**
+```haskell
+-- | Alternative knot form via fixed point (equivalent to @loop'@).
+-- Kept as reference for understanding lazy fixed points.
+loop'' :: ((a, k) -> (b, k)) -> (a -> b)
+loop'' f = \a -> fst (fix (\(_,c) -> f (a, c)))
+```
+
+Add a comment explaining *why* it's there. Don't export it unless it's useful now. The warning `-Wunused-top-binds` is a signal to document intent, not necessarily to delete code.
+
