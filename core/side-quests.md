@@ -138,3 +138,21 @@ This combines functions applicatively head-by-head, recurses on tails. **Product
 
 Compare with recent browser/CDP work. What can we learn from prior exploration?
 
+⟝ Search for what this means?
+
+⟪
+Hyperfunctions form a flabby sheaf:
+
+Restriction maps (observing on smaller domains)
+Gluing data (piecing together local observations)
+The sheaf condition is about consistent observations
+
+This sheaf structure is naturally coinductive:
+
+You build hyperfunctions by specifying compatible local observations
+Global objects emerge as limits of local data
+Reminiscent of final coalgebras: unique extension given local observations
+⟫
+
+⟝ What does the machines library look like if you take out the monad? (MachineT Identity) or (Applicative f) => MachineT f.
+
