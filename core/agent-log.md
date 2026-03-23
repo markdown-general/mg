@@ -1,18 +1,40 @@
-# yarn-agent ⟜ a yarn model of agent interaction.
+# agent-log ⟜ Multi-agent session coordination via immutable, branching conversation trees
 
-◊ Existing projects that add up to this one:
+## Current Work
 
-⟜ reef: A thesis that mg is a decent representation of multi-agent memory, is planar (even functions like identity take up time and space), and is a Yarn (traced monoidal category). The mam representation may als be closed and thus a reversible computation.
+◊ **Polish, test, and fully document agent-fork**
 
-⟜ tcat: A draft of yarn.
+agent-fork was created during development of this card. It provides the concrete mechanism for spawning agents and managing I/O. The library needs a good working, testing, and documentation pass.
 
-⟜ memo: a failed attempt to study the pi-mono jsonl data that is sessions
+---
 
-⟜ grepl: a shared cabal repl tool.
+## agent-fork: Pi Channel Harness
 
-⟜ buff/browser.md: browser extensions to help agent comms.
+**Location:** ~/haskell/agent-fork/ (v0.1.0.0)
 
-⟜ buff/spin.md: ability to spin field agents.
+**What it is:** A Haskell library that wraps the `pi` executable for agentic workflows. Uses named pipes (FIFOs) to decouple I/O from console buffering, enabling agents to write queries and read output asynchronously without blocking.
+
+**Core:** 
+- `PiConfig` — configuration (command, workdir, FIFO paths)
+- `piChannel` — spawns pi process with I/O wired to named pipes, returns ProcessHandle
+
+**Key pattern:** Agents write to stdin FIFO, spawn returns immediately, agents read logs from stdout.md whenever ready. No console buffering. No blocking.
+
+**Current state:** Builds cleanly, minimal surface area (Agent.Fork.hs ~150 lines), untested operationally.
+
+---
+
+## Related
+
+⊢ [sem-tail.md](sem-tail.md) ⟜ Semantic tail search for sessions
+  ⟜ How to understand which concepts are central to an agent log (tail bias via decay)
+  ⟜ How to detect drift (moving-average vs full-memory divergence)
+  ⟜ How to infer intent by tracing backward from session tail
+
+⊢ [reef.md](reef.md) ⟜ Theoretical foundation
+  ⟜ Sessions as planar traced monoidal categories
+  ⟜ Stateless workers vs stateful inhabitants
+  ⟜ How to accrete meaning without full context
 
 ---
 
@@ -203,3 +225,8 @@
 ⊢ sequence decided ⊣
   ⟜ yarn → bridge → PoC, or parallel checkpoints?
   ⟜ dates/milestones if applicable
+
+⊢ agent-fork verified ⊣
+  ⟜ operationally tested
+  ⟜ fully documented
+  ⟜ gaps identified for memo integration

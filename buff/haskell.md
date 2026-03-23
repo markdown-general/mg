@@ -1,145 +1,22 @@
 # buff-haskell
 
-*Named session: Haskell library standardization via checklist, with focus on agent-fork as foundation for shared REPL coordination.*
-
----
-
 Haskell libraries tend to go in ~/haskell/. The repos there are mostly Haskell libraries and can be a good resource for pattern matching solutions.
 
-Default choices:
+## Defaults
 
-⟜ language: GHC2024
-⟜ cabal stanzas for options and extensions from ~/haskell/numhask-space
-⟜ CI as per numhask-space
-⟜ doctests in haddocks and no test stanza. testing happens using an independent test runner: cabal-docspec
-⟜ CI workflow: copy from ~/haskell/numhask-space/.github/workflows/haskell-ci.yml
-⟜ tested-with: GHC 9.14, 9.12, 9.10 (last three versions)
+**Language & tooling:**
+- Language edition: GHC2024
+- Cabal stanzas for options and extensions from ~/haskell/numhask-space
+- CI workflow: copy from ~/haskell/numhask-space/.github/workflows/haskell-ci.yml
+- Tested-with: GHC 9.14, 9.12, 9.10 (last three versions)
 
-## Import Style
-
-⟜ **Recipe for Prelude conflicts (id, (.))**
-
-When using `Category` or `Arrow` instances:
-
-```haskell
-import Prelude hiding (id, (.))
-import Control.Category (id, (.))
-```
-
-**Why:** `id` and `(.)` from Prelude clash with categorical versions. Hide Prelude's, import Category's explicitly.
-
-⟜ **Development imports: unqualified by default**
-
-Import unqualified during development to catch name clashes for free. Only use `import Prelude qualified` when replacing Prelude entirely (e.g., NumHask).
-
-⟜ **Avoid explicit import list edits**
-
-Don't maintain tight import lists (`import Data.Foo (bar, baz)`). Import unqualified, let the compiler warn on actual namespace conflicts. This avoids cascading bugs from list maintenance.
-
-⟜ **Intent encoding**
-
-- Usually using Prelude? Import unqualified.
-- Replacing Prelude? Import qualified and add qualified imports as needed.
-- Short-lived conflicts? Hide just the clashing names, import the rest unqualified.
-
-## Agentic Documentation Philosophy
-
-Readme.md and haddocks should be **well-crafted for an agentic landscape**:
-- Explain design choices and why they matter in agent contexts
-- Provide concrete usage examples for agent workflows
-- Document not just _what_ the code does, but _why_ the architecture supports agentic interaction
-- Use **bold haddocks** (100% coverage, detailed examples, design sections)
-- Readmes have grown in depth as agentic support increased
-
-## agent-fork Library
-
-◉ **COMPLETE** — Published to GitHub https://github.com/tonyday567/agent-fork
-
-- **Module**: Agent.Fork (pi harness for Claude-style LLM interface)
-- **Design**: Named pipes (FIFO) for decoupled I/O, pattern from grepl
-- **Purpose**: Agentic platform for interactive code exploration, type wrangling
-- **Version**: 0.1.0.0, BSD-2-Clause, GHC2024
-
-✓ All sections complete:
-- Project initialization (cabal init, module structure, dependencies)
-- Code quality (ormolu, hlint, cabal-gild)
-- Documentation (readme.md, 100% haddock coverage)
-- Release preparation (changelog, tested-with: 9.14, 9.12, 9.10)
-- Verification (CI workflow copied, pushed to main)
-
-Status: Awaiting CI final confirmation, ready for Hackage publishing.
-
-## grepl Library (In Progress)
-
-⊢ Status: Ready for GitHub and CI verification
-
-- **Modules**: Grepl, Grepl.Watcher (cabal-repl harness for agentic GHCi interaction)
-- **Design**: Named pipes (FIFO) for decoupled I/O from console buffering
-- **Purpose**: File-based message passing protocol with markdown-driven workflows
-- **Repository**: https://github.com/tonyday567/grepl (awaiting creation)
-- **Version**: 0.1.0.0, BSD-3-Clause, GHC2024
-
-✓ Completed:
-- Environment check, dependency management
-- Code quality: ormolu, hlint, cabal-gild all ✓
-- Documentation: readme.md ✓, 100% haddock coverage ✓
-- Release Preparation: author updated (Tony Day), changelog, version confirmed
-- Verification: CI workflow copied, tested-with expanded (9.14/9.12/9.10)
-
-✓ Published to GitHub: https://github.com/tonyday567/grepl
-
-✓ Fixed: cabal.project local perf dependency → GitHub branch reference (haskell-9.14-working)
-  Pattern: Commit current working state of perf to branch, push to GitHub, reference by branch
-  No state change—just transparency across machines and CI runners
-
-◆ CI workflow re-triggered on GitHub Actions
-  Expected to pass: hlint, ormolu, build (GHC 9.14/9.12/9.10), cabal-docspec
-  Status: https://github.com/tonyday567/grepl/actions
-
-◆ Next: Await CI completion, then Publishing (hkgr tagdist → Hackage)
-
-## Strategic Context: Agent Communication & Forking
-
-The ~35 libraries in ~/haskell/ form an interdependent ecosystem. The challenge:
-- GHC 9.14 upgrade cascades across all projects
-- One library's allow-newer change likely affects others
-- Agents need bi-directional communication and shared context
-
-**Solutions in development:**
-- **grepl**: Agents share a single cabal repl, listen for types and upstream function changes
-- **agent-fork**: Ability for agents to fork themselves (or reading lists / other agents), all held as [Text] in JSONL
-  - Token absorber: condensing interaction history
-  - Differently-read you: alternative framings of the same agent
-  - Communication via jsonl: standardized format for agent state/reading lists
-
-This session's focus: **agent-fork as the foundation for multi-agent coordination in Haskell development.**
-
----
-
-## Reference: Analysis Documents
-
-⊢ Study (unverified, requires code review):
-
-- **~/self/intake/sabela-analysis.md** — Reactive Haskell notebook patterns
-- **~/self/intake/scripths-analysis.md** — Minimal execution engine patterns
-
-These documents propose architectural approaches to shared REPL coordination. Verify against source code before adopting patterns.
-
-## Verified Patterns
-
-⊢ From grepl source code (verified):
-
-- **Marker protocol** — `---SABELA_MARKER_n---` injected into stdout for cell demarcation
-- **Named pipes (FIFO)** — Decoupled I/O pattern from console buffering
-- **Local dependency coordination** — Reference upstream via GitHub branches during development
-
-These are proven patterns already in use. grepl integrates both analysis frameworks (Sabela + scripths) implicitly in its design.
-
----
+**Testing:**
+- Doctests in haddocks, no test stanza
+- Testing via cabal-docspec (independent test runner)
 
 ## Build Performance
 
-⊢ cabal build is #1 waiting-point for agents
+⊢ cabal build is the #1 wait-point for agents
 
 Agents frequently pause at `cabal build` steps during checklist execution.
 This is a natural bottleneck (compilation time) but worth tracking for optimization.
@@ -150,64 +27,59 @@ Potential mitigations:
 - Parallel compilation flags
 - Consider when designing library features vs. compilation cost
 
----
+## Development Practices
 
-## allow-newer audit
+### Explicit Export Lists & Development
 
-⊢ Review allow-newer specifications across 35 libraries
-  After upgrading to GHC 9.14, allow-newer constraints should be minimal.
-  Goal: Most projects need no allow-newer (or just *:base if still pinned to older deps).
-  Survey shows patterns; audit each cabal.project to cut back to defaults.
-  
-## Doctest Skeleton
+**Pattern:** Modules with explicit export lists signal frozen APIs. If you're adding new functions, the module should have implicit exports.
 
-To add to module docs:
+When pairing:
+- If a module has an explicit export list (`module Foo (bar, baz) where`), you're in publication mode
+- New functions from pairing should be added to the list, OR the module should switch to implicit exports to return to development mode
+- If neither happens, a cleanup agent will see the new function as unused and delete it
 
-```haskell
--- | Identity morphism
--- >>> runFn Pure 42
--- 42
---
--- | Lift a function
--- >>> runFn (Lift (\x -> x + 1)) 5
--- 6
---
--- | Compose: right runs first
--- >>> runFn (Compose (Lift (*2)) (Lift (\x -> x + 1))) 5
--- 12
---
--- | Category instance (. and id)
--- >>> let f = Lift (\x -> x + 1) :: Traced (->) Int Int
--- >>> let g = Lift (\x -> x * 2) :: Traced (->) Int Int
--- >>> runFn (f . g) 5
--- 11
-```
-
----
-
-## Key Pattern: Composition Order
-
-⚠️ **Critical to remember:**
-
-```
-Compose f g means: apply g first, then apply f to the result
-```
-
-This is **right-to-left** order (standard function composition).
+**Rule:** Before adding development code to a published module, remove the export list:
 
 ```haskell
--- BAD intuition: "add then times"
--- Compose times2 addOne  would mean: addOne then times2
---                               (5 + 1 = 6, then 6 * 2 = 12)
+-- During development, implicit exports:
+module Agent.Fork where
 
--- CORRECT: Think of it as (f . g) x = f (g x)
---          where f = times2, g = addOne
---          Compose f g = f . g
+-- After finalization, explicit exports:
+module Agent.Fork (PiConfig(..), piChannel) where
 ```
 
----
+### Import Style
 
-## Keep Implementations, Not Warnings
+**Prelude conflicts (id, (.))**
+
+When using `Category` or `Arrow` instances:
+
+```haskell
+import Prelude hiding (id, (.))
+import Control.Category (id, (.))
+```
+
+Why: `id` and `(.)` from Prelude clash with categorical versions. Hide Prelude's, import Category's explicitly.
+
+**Unqualified by default during development**
+
+Import unqualified to catch name clashes for free. Only use `import Prelude qualified` when replacing Prelude entirely (e.g., NumHask).
+
+Don't maintain tight import lists (`import Data.Foo (bar, baz)`) during development—import whole modules, let the compiler warn on actual conflicts. This avoids cascading bugs from list maintenance.
+
+### Cabal-docspec in Development
+
+Run tests during development:
+
+```bash
+cabal-docspec
+```
+
+Doctests use `>>>` format (tested) and live in haddock comments. See Module Header Structure section for setup patterns.
+
+## Code Quality & Preservation
+
+### Keep Implementations, Not Warnings
 
 **Pattern:** Better to keep an unused implementation with a doc comment than delete it to silence a warning.
 
@@ -224,5 +96,119 @@ loop'' :: ((a, k) -> (b, k)) -> (a -> b)
 loop'' f = \a -> fst (fix (\(_,c) -> f (a, c)))
 ```
 
-Add a comment explaining *why* it's there. Don't export it unless it's useful now. The warning `-Wunused-top-binds` is a signal to document intent, not necessarily to delete code.
+Add a haddock comment explaining *why* it's there. Don't export it unless it's useful now. The warning `-Wunused-top-binds` is a signal to document intent, not necessarily to delete code.
+
+### Comments: Haddock-Attached vs Floating
+
+**Pattern:** Only comments attached to haddock documentation are preserved. Floating comments drift and get deleted.
+
+Floating comments (comments not bound to definitions):
+```haskell
+-- Section explanation
+-- This describes what comes next
+
+foo :: Int -> Int
+foo = ...
+```
+
+These comments are **fragile**. They drift from context, agents delete them to clean code, they become stale anchors.
+
+Haddock-attached comments (comments bound to definitions):
+```haskell
+-- | Section explanation: what foo does.
+-- 
+-- This describes the purpose and usage.
+foo :: Int -> Int
+foo = ...
+```
+
+These comments are **safe**. They're semantically bound to the definition, preserved during refactoring, available in generated documentation.
+
+**Rule:** Put all explanatory intent into haddocks (`-- |` for definitions, `-- ^` for fields). Don't rely on floating comments to preserve design intent—they will be deleted or drift.
+
+If you need structural commentary: make it a haddock doc block. For temporary notes: use an issue or card, not code comments. For architecture: put it in the module header haddock or README.
+
+## Module Header, Haddocks & Doctests
+
+Standard Haskell module structure:
+
+```haskell
+-- | One-line summary of module.
+--
+-- A paragraph or so discussing the intentions of the module.
+module MyModule where
+
+import Data.Text
+import System.IO
+
+-- $setup
+-- >>> import MyModule
+-- >>> import Data.Text
+--
+-- Setup block for module-level doctest imports.
+-- Code here runs before each doctest example.
+
+-- | Haddock for first definition with doctest example.
+-- 
+-- >>> add 2 3
+-- 5
+add :: Int -> Int -> Int
+add x y = x + y
+```
+
+**Haddocks:**
+- Module header: brief description and design philosophy
+- Functions/types: clear doc comments with purpose and typical use
+- Data constructors: document each field's meaning and constraints
+- Examples: include code blocks (doctest format) for key functions when possible
+
+Aim for 100% coverage. Verify with:
+
+```bash
+cabal haddock
+```
+
+**Doctests:**
+- Use `>>>` format (tested by cabal-docspec)
+- Keep examples focused on basic behavior
+- Even simple examples help agents understand signatures and patterns
+- Use `-- $setup` blocks for common imports across module
+
+Run tests with:
+
+```bash
+cabal-docspec
+```
+
+## Dependency Management
+
+### allow-newer: Relaxing outdated dependency bounds
+
+**Pattern:** When a transitive dependency (e.g., `tdigest`) has outdated version constraints (e.g., `base>=4.12.0.0 && <4.22` failing on GHC 9.14's base-4.22.0.0), use `allow-newer` in cabal.project to override.
+
+**Add to cabal.project:**
+
+```
+allow-newer: *:base
+allow-newer: *:containers
+```
+
+The `*:` syntax means "all packages" can violate the constraint. Example from hcount:
+
+```
+allow-newer: *:base
+allow-newer: indexed-traversable:base
+allow-newer: hcount:base
+allow-newer: hcount:ghc
+allow-newer: hcount:containers
+allow-newer: optics-core:containers
+allow-newer: indexed-traversable:containers
+```
+
+**When to use:**
+- After GHC upgrades (9.14) where transitive deps have stale bounds
+- During development on cutting-edge GHC versions
+- When waiting for upstream to release fixed versions
+
+**Review allow-newer across libraries:** After upgrading to GHC 9.14, audit each cabal.project. Most should need no allow-newer; only those with stale transitive deps need it. Goal: keep allow-newer minimal, revert when upstream catches up.
 

@@ -1,3 +1,5 @@
+design asks ⟜ what is mg solving for?
+
 # reef ⟜ planar traced monoidal category that accretes meaning
 
 **The question:**

@@ -1,0 +1,327 @@
+# Decay Curves: Full Memory vs Moving Average vs Last Chunk
+
+## Parameters
+weights = [3.0, 2.0, 1.0, 1.0, 1.0]
+
+### Chunk 1
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 3.00
+  Costrong profunctor: 2.00
+  Loop abstraction: 1.00
+  Fold/build adjunction: 1.00
+  Cochoice profunctor: 1.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 3.00
+  Costrong profunctor: 2.00
+  Loop abstraction: 1.00
+  Fold/build adjunction: 1.00
+  Cochoice profunctor: 1.00
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Costrong profunctor: 2.00
+  Loop abstraction: 1.00
+  Fold/build adjunction: 1.00
+  Cochoice profunctor: 1.00
+
+### Chunk 3
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 9.00
+  Fold/build adjunction: 3.00
+  Feedback primitive: 2.00
+  Costrong profunctor: 2.00
+  yank and run: 1.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 7.32
+  Fold/build adjunction: 2.24
+  Feedback primitive: 2.00
+  Costrong profunctor: 1.28
+  Stream processing, coroutines: 1.00
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Feedback primitive: 2.00
+  Stream processing, coroutines: 1.00
+  Fusion and erasure: 1.00
+  Free traced monoidal category: 1.00
+
+### Chunk 5
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 12.00
+  Free traced monoidal category: 3.00
+  Fold/build adjunction: 3.00
+  Deferred operations: 3.00
+  Stream processing, coroutines: 2.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 7.68
+  Free traced monoidal category: 2.64
+  Deferred operations: 2.40
+  Stream processing, coroutines: 1.64
+  Feedback via existential: 1.60
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Free traced monoidal category: 2.00
+  Stream processing, coroutines: 1.00
+  Mendler-style case analysis: 1.00
+  Fold/build fusion: 1.00
+
+### Chunk 7
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 18.00
+  Fold/build adjunction: 5.00
+  Fusion and erasure: 3.00
+  Free traced monoidal category: 3.00
+  Deferred operations: 3.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 10.32
+  Fold/build adjunction: 2.52
+  Fusion and erasure: 2.41
+  Free traced monoidal category: 1.69
+  Deferred operations: 1.54
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Fusion and erasure: 2.00
+  Stream processing substrate: 1.00
+  Costrong structure: 1.00
+  Category laws: 1.00
+
+### Chunk 9
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 24.00
+  Fold/build adjunction: 5.00
+  Fusion and erasure: 3.00
+  Free traced monoidal category: 3.00
+  Deferred operations: 3.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 12.00
+  Three constructors: 2.00
+  Fold/build adjunction: 1.61
+  Sliding Law: 1.60
+  Fusion and erasure: 1.54
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Three constructors: 2.00
+  Zero overhead: 1.00
+  Unified tower: 1.00
+  Adjunction collapse: 1.00
+
+### Chunk 11
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 30.00
+  Fold/build adjunction: 6.00
+  Fusion and erasure: 3.00
+  Free traced monoidal category: 3.00
+  Deferred operations: 3.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 13.08
+  Loop reopening: 2.00
+  Fold/build adjunction: 1.83
+  Loop as value: 1.60
+  Three constructors: 1.28
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Loop reopening: 2.00
+  Untrace primitive: 1.00
+  Removal of arr: 1.00
+  Arrow's arr constraint: 1.00
+
+### Chunk 13
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 36.00
+  Fold/build adjunction: 7.00
+  Stream processing: 3.00
+  Fusion and erasure: 3.00
+  Free traced monoidal category: 3.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 13.77
+  Profunctors: 2.00
+  Fold/build adjunction: 1.97
+  Free traced category: 1.60
+  Stream processing: 1.46
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Profunctors: 2.00
+  Stream processing: 1.00
+  Costrong: 1.00
+  Cochoice: 1.00
+
+### Chunk 15
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 42.00
+  Fold/build adjunction: 8.00
+  Free traced monoidal category: 5.00
+  Stream processing: 3.00
+  Fusion and erasure: 3.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 14.21
+  Free traced monoidal category: 2.28
+  Fold/build adjunction: 2.26
+  Costrong vs Cochoice: 1.60
+  Profunctors: 1.28
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Free traced monoidal category: 2.00
+  Initial/final coalgebra duality: 1.00
+  Fold/build adjunction: 1.00
+  Cochoice feedback loops: 1.00
+
+### Chunk 17
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 45.00
+  Fold/build adjunction: 9.00
+  Free traced monoidal category: 7.00
+  Traced: 3.00
+  Stream processing: 3.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 11.50
+  Free traced monoidal category: 3.06
+  Traced: 3.00
+  Fold/build adjunction: 2.25
+  Transparency: 2.00
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced: 3.00
+  Transparency: 2.00
+  vs Arrow/Transformers: 1.00
+  Fold/Build adjunction: 1.00
+  Applications: 1.00
+
+### Chunk 19
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 51.00
+  Fold/build adjunction: 11.00
+  Free traced monoidal category: 7.00
+  Stream processing: 4.00
+  Traced: 3.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 12.76
+  Fold/build adjunction: 3.44
+  Free traced monoidal category: 1.96
+  Traced: 1.92
+  fold/build adjunction: 1.60
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Fold/build adjunction: 2.00
+  Stream processing: 1.00
+  Compose + yank: 1.00
+  Avoids Arrow/transformers: 1.00
+
+### Chunk 21
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 54.00
+  Fold/build adjunction: 13.00
+  Free traced monoidal category: 11.00
+  Traced: 6.00
+  Stream processing: 4.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 10.57
+  Free traced monoidal category: 4.85
+  Traced: 4.23
+  Fold/build adjunction: 4.00
+  fold/build adjunction: 1.02
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced: 3.00
+  Free traced monoidal category: 2.00
+  Traced catamorphisms: 1.00
+  Fold/build adjunction: 1.00
+  Axioms: 1.00
+
+### Chunk 23
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 57.00
+  Free traced monoidal category: 13.00
+  Fold/build adjunction: 13.00
+  Traced: 9.00
+  Stream processing: 4.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 9.76
+  Traced: 5.11
+  Free traced monoidal category: 4.71
+  Fold/build adjunction: 2.56
+  Deferral: 2.00
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Deferral: 2.00
+  run and yank: 1.00
+  Stream substrate: 1.00
+  Laws verified: 1.00
+
+### Chunk 25
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 57.00
+  Traced: 15.00
+  Free traced monoidal category: 15.00
+  Fold/build adjunction: 15.00
+  Stream processing: 4.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced: 8.67
+  Traced GADT: 6.25
+  Free traced monoidal category: 5.01
+  Fold/build adjunction: 3.44
+  Costrong: 1.67
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced: 3.00
+  Free traced monoidal category: 2.00
+  Stream processing & coroutines: 1.00
+  Fold/build adjunction: 1.00
+  Arrow-free design: 1.00
+
+### Chunk 26
+
+**Decay=1.0 (Full Memory)**
+  Traced GADT: 60.00
+  Fold/build adjunction: 16.00
+  Traced: 15.00
+  Free traced monoidal category: 15.00
+  Three constructors: 4.00
+
+**Decay=0.8 (Moving Avg)**
+  Traced GADT: 8.00
+  Traced: 6.93
+  Free traced monoidal category: 4.01
+  Fold/build adjunction: 3.75
+  Three constructors: 2.05
+
+**Decay=0.0 (Last Chunk Only)**
+  Traced GADT: 3.00
+  Three constructors: 2.00
+  Stream, coroutines, lateral: 1.00
+  Lighter than Arrow: 1.00
+  Fold/build adjunction: 1.00
+

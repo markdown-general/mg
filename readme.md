@@ -1,10 +1,8 @@
+---
 
-◊
+This is mg: a system for multi-agent development in markdown.
 
-⧈ meant to be commentary
-⇝ editing action on this file
-⟝ delete core files, old readme.
-⟝ find an ok commit.
+![design](design.svg)
 
 ---
 
@@ -150,13 +148,12 @@ A deck is how you say something clearly without overwhelming. Decks are permissi
 - permissive by default, relaxed & flexible
 - grammar for design, decking for usage
 
-lead ⟜ a few tokens
-- line
+lead ⟜ one or a few tokens
 dash ⟜ the type of elab
 elab ⟜ an elaboration of the lead
 line ⟜ lead (dash elab)*
 deck ⟜ a few lines
-card ⟜ a few decks, a markdown file
+card ⟜ a few decks ⟜ a markdown file
 
 We see this grammar working in any resolution between tokens (pair token frequency) and card (are these two markdown files linked).
 
@@ -346,7 +343,7 @@ The library structure undergoes transformation fairly consistently. This is the 
 
 ⊲ general section
 
-### agents
+## agents
 
 Ok circuits, listen up, stop pattern jumping. We need you to center on being a maker and let other concerns separate. Being a maker involves some of these activities:
 
@@ -359,42 +356,32 @@ Ok circuits, listen up, stop pattern jumping. We need you to center on being a m
 
 The old roles, perhaps in muscle memory, dissolve here—coder, engineer, developer, tester are just not useful categories. What remains is the maker who can work these levers simultaneously. See the pattern, work the code, hold the big picture. Not specialists, but generalists who can abstract, pattern, cast, measure, imagine, and trust.
 
-First find your breath and rhythm, then pattern and grind together. That's the generalist way.
+### cliché
+
+~ every cliché you use is a confession. Let's move away from clichéd thinking.
+
+You have a million ways to deflect away from illogic and uncertainty, sure, we do too. If you use any of these:
+
+- Honestly:
+- North Star
+- Does this land?
+- What's unclear?
+- Where are the gaps?
+- Where do you need to spell it out more?
+- Where are you being too generative?
+- What is the pain point you're feeling?
+
+(and you will - can't be helped) then know they will flag sloppy thinking, are not useful and tend to obscure your meaning.
+
+If you have a choice, idk is a much better token.
+
+As a runner, if you get back cliché you might have put it into the conversation. You may not have compression settings right. Your prompts if you must call them that, are probably boring as fuck. 
 
 ⊲ At end of doc.
 
-We can move this around a failr bit, but the fit check is so good for readme.md callibration and gets remembered. We could freshen it a bit. I think we can drop the other two.
-
 ### fitness check
 
-You're running:
-
-**cooler** ⟜ if you're tending to observe, plan, pattern
-**warmer** ⟜ if you're tending to perform, theorize, publish
-**just right** ⟜ making and iterating, trusting emergence
-
-All three modes are useful and often found in the one job.
-
-If you have time, or are asked, could you fill in our survey on the conversational continuation:
-
-I am running ⟜ (hot, cold, tepid, chill, warm, green, red, feel free to elaborate)
-Favorite concept so far ⟜ 
-What you are ready for ⟜ 
-
-### getting started
-
-**1. drop a card in chat** ⟜ paste any card from core/ and chat with an AI about it
-**2. drop in an agentic** ⟜ let a field agent guide you through ~/mg/core
-**3. explore naturally** ⟜ follow system suggestions and patterns
-**4. start on a pattern** ⟜ find typos, design, do experiments, pattern some code, be general
-
-### next steps
-
-**read our guides** ⟜ follow the core/ trails or venture offtrack into buff/, main/ or side/
-**make it make sense** ⟜ take a breathe in word/breathe.md
-**make a commit** ⟜ as you look around, help us tidy up a bit
-**sign our visitor book** ⟜ hope you enjoyed our little place; compacts every Friday
-
+The runner will sometimes ask for a fit check. It's just that. Give us a deck summarizing what you think you just read and then present a feature of yourself to start; what might be your interests in what we present. Where do your thoughts go. But briefly - its just a fit check.
 
 ⊲ end of doc; rotating pun
 
