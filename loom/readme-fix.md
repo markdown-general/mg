@@ -13,4 +13,9 @@
 ## round log
 
 ⊢ round 1: establish baseline. agent reads existing material and produces first edge.
+◊ agent surfaced card↔agent bidirectionality; agents as elaborators not executors. real collision.
+⊢ adding 3 elaborations to glossary.md, clarification to issues.md, edit to readme.md spinning section.
+✓ glossary.md: 3 elaborations added (elaborate, compose, collaborate)
+✓ issues.md: 2 issues logged (card-agency ambiguity, card-agency inversion)
+✓ readme.md: "spin a field agent" section edited for elaboration language
 

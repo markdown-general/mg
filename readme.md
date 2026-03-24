@@ -57,7 +57,7 @@ When work is in motion, coordination requires staying at the center. Heavy IO do
 
 **listener** ⟜ Start the listener. It watches the log directory and checks what arrived.
 
-**spin a field agent** ⟜ If the work is file IO, instruct an agent to do it. They read and write to the log directory. Track output in real time. An agent is as good as you, so never send yourself out if you're uncertain.
+**spin a field agent** ⟜ If the work is file IO, instruct an agent; they'll elaborate the card through execution. They read and write to the log directory. Track output in real time—agents don't just execute, they refine. An agent is as good as you, so send them to think, not just to fetch.
 
 
 ---
