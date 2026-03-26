@@ -1,7 +1,5 @@
 ◊ design
 
-Design as intentional bringing-into-being. Pattern recognition and reflection.
-
 ```dot
 digraph mg {
     rankdir=TB;
@@ -73,4 +71,8 @@ digraph mg {
 }
 ```
 
-⊲ See: readme.md for operational frame.
+Not everything fits as neatly as the graph suggests and it can be considered an aspirational snapshot of design. It is certainly always under review and contestable.
+
+To start somewhere, a design principle it contains is that we try and encode with intent. When we place and arrange content like this, select lead words and arrange them, we are encoding, or coding words and relations between them. When we code, we try and reveal the purpose and structure of the computation along the way; the intensional structure we are seeing as we are making. 
+
+
