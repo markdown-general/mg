@@ -270,22 +270,34 @@ final check on main
 cabal clean && cabal build && cabal-docspec
 ```
 
-hkgr tagdist ⟜ Tag the release commit.
+git tag ⟜ Tag the release commit.
 
 ```bash
-hkgr tagdist
+git tag vX.Y.Z
 ```
 
-hkgr publish ⟜ Publish to Hackage.
+cabal check ⟜ Verify package metadata.
 
 ```bash
-hkgr publish
+cabal check
 ```
 
-If cabal.project has specifications (multi-package workspace), use:
+cabal sdist ⟜ Build source distribution.
 
 ```bash
-cabal upload .hkgr/<package>-X.Y.Z.tar.gz --publish
+cabal sdist
+```
+
+git push tag ⟜ Push tag to GitHub.
+
+```bash
+git push origin vX.Y.Z
+```
+
+cabal upload ⟜ Publish to Hackage.
+
+```bash
+cabal upload --publish dist-newstyle/sdist/<package>-X.Y.Z.tar.gz
 ```
 
 check Hackage ⟜ Verify package appears on Hackage and haddocks build correctly.

@@ -184,25 +184,39 @@ cabal-docspec
 
 ### allow-newer: Relaxing outdated dependency bounds
 
-**Pattern:** When a transitive dependency (e.g., `tdigest`) has outdated version constraints (e.g., `base>=4.12.0.0 && <4.22` failing on GHC 9.14's base-4.22.0.0), use `allow-newer` in cabal.project to override.
+**Pattern:** When a transitive dependency has outdated version constraints (e.g., `base>=4.12.0.0 && <4.22` failing on GHC 9.14's base-4.22.0.0), use `allow-newer** in cabal.project to override.
+
+**Using wildcards**
+1. Run `cabal build` with no allow-newer
+2. If dependency errors occur, try allow-newer: *:base or whatever the underlying stale bound is pointing to.
+3. Look at the first error, not the last.
+4. Repeat once or twice but no more. After twice you will be heading down a dodgy build plan.
+
+**finding Exact Flags:**
+
+1. Run `cabal build` with no allow-newer
+2. Read the **first rejection** in the error output (not the last)
+3. Extract `package:library` format: `[__N] rejecting: PACKAGE (conflict: ... => LIBRARY>=...)`
+4. Add `PACKAGE:LIBRARY` to allow-newer
+5. Repeat until build succeeds or hits a real compilation error
+
+Example from web-rep 0.14.1.0:
+```
+[__8] next goal: http-api-data (dependency of scotty)
+[__8] rejecting: http-api-data-0.7 (conflict: scotty => http-api-data<0.7)
+     → add: scotty:http-api-data
+
+[__9] next goal: uuid-types
+[__9] rejecting: uuid-types-1.0.6 (conflict: time => template-haskell==2.24.0.0, uuid-types => template-haskell>=2.14 && <2.24)
+     → add: uuid-types:template-haskell
+```
 
 **Add to cabal.project:**
-
 ```
-allow-newer: *:base
-allow-newer: *:containers
-```
-
-The `*:` syntax means "all packages" can violate the constraint. Example from hcount:
-
-```
-allow-newer: *:base
-allow-newer: indexed-traversable:base
-allow-newer: hcount:base
-allow-newer: hcount:ghc
-allow-newer: hcount:containers
-allow-newer: optics-core:containers
-allow-newer: indexed-traversable:containers
+allow-newer:
+  package-a:base,
+  package-b:template-haskell,
+  package-c:time
 ```
 
 **When to use:**
@@ -210,5 +224,6 @@ allow-newer: indexed-traversable:containers
 - During development on cutting-edge GHC versions
 - When waiting for upstream to release fixed versions
 
-**Review allow-newer across libraries:** After upgrading to GHC 9.14, audit each cabal.project. Most should need no allow-newer; only those with stale transitive deps need it. Goal: keep allow-newer minimal, revert when upstream catches up.
+**Goal:** Keep allow-newer minimal and explicit. Track upstream issues for when bounds get updated.
 
+Ask if documentation of tracked github issues is warranted.
