@@ -6,6 +6,8 @@
 
 **Where it lives**: ~/other/pi-mono (or npm @mariozechner/pi-*)
 
+**Settings storage**: ~/.pi/agent/settings.json (global; project overrides at .pi/settings.json)
+
 ---
 
 ## architecture layers
@@ -176,30 +178,20 @@ The tradeoff: if an agent makes a mistake and you want to "fix it," you don't fi
 
 ---
 
-## tree browser
+## thinking blocks & RPC
 
-**Status**: ~/other/pi-mono is on feature branch `rpc-browsing-surface` (dnouri/pi-mono) paired with `browser` branch of ~/other/pi-coding-agent/ (dnouri/pi-coding-agent).
+**Status**: ~/other/pi-mono tracks `origin/main` (v0.55.3+). Emacs frontend via ~/other/pi-coding-agent (master).
 
-⟝ audit and remove if unnecessary.
+**Thinking block handling**:
+- v0.55.1+ properly handles `redacted_thinking` blocks
+- RPC streams `thinking_start`, `thinking_delta`, `thinking_end` events in message_update
 
-It adds:
 
-**Tree Browser** (`C-c C-p` then `w` in Emacs):
-- Visual branch structure of current conversation
-- Active path highlighted; abandoned branches dimmed
-- Five filter modes (cycle with `f`): no-tools (default), default, user-only, labeled-only, all
-- `RET` navigates to branch point; `S` navigates with branch summarization
-- Label nodes with `l`, search with `/`
-- `C-c C-k` aborts in-flight summarization
-- Help menu with `?` or `h`
-
-**Local installation**:
-- `~/other/pi-mono` checked out to `rpc-browsing-surface` branch
-- `~/other/pi-coding-agent` checked out to `browser` branch
-- Built and installed globally: `npm install -g ./packages/coding-agent`
-- Doom config points to local pi-coding-agent via `:local-repo` in packages.el
-
-**Integration notes**: Both buffers use magit-section for point-centric dispatch. Requires new RPC commands (list_sessions, get_tree, navigate_tree, set_label, abort_branch_summary) now on rpc-browsing-surface. Once merged to main, revert to standard npm install and remove local branches.
+**Installation**:
+- `~/other/pi-mono` tracks origin/main (canonical upstream)
+- `~/other/pi-coding-agent` tracks origin/master (stable Emacs frontend)
+- Built and installed globally: `npm install -g ./packages/coding-agent` from pi-mono
+- Doom config: pi-coding-agent.el as local-repo (not on MELPA)
 
 ## getting started
 

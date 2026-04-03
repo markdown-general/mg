@@ -1,168 +1,132 @@
-# emacs ⟡ our setup
+## emacs ⟡ our agent setup
+
+start server ⟡ `emacs --daemon`
+verify ⟡ `emacsclient -e "(server-running-p)"`
+
+open (visible) frame ⟡ `emacsclient -c`
+
+evaluate elisp ⟡ `emacsclient -e (your-elisp-here)`
+
+find buffer name  ⟡ `emacsclient -e "(buffer-name (current-buffer))"`
+
+hot-load ⟡ send fixed Elisp without restart
+
+open org agenda ⟡ `emacsclient -e "(with-selected-frame (car (last (frame-list))) (with-current-buffer \"*Org Agenda*\" (buffer-substring-no-properties (point-min) (point-max)))))"`
+
+read current buffer ⟡ `emacsclient -e "(with-selected-frame (car (last (frame-list))) (buffer-name (window-buffer (selected-window))))"`
 
 ---
 
-## inventory
+## emacs ⟡ our developing design
 
-### doom baseline
+As a part of the mg ways and means, emacs is an agency collaborative tool. We are developing in emacs:
 
-Minimal, vanilla-close Doom Emacs configuration. Active modules:
+- as a common interface between an agent and a runner using pi-coding-agent and some API tweaks. See [[~/other/pi-coding-agent.md]] for the bespoke emacs package changes, and [[buff/pi-mono.md]] for details on pi.
 
-**UI/Completion:**
-- vertico (search engine)
-- company (code completion)
-- doom-dashboard (splash)
-- modeline (Doom aesthetic)
-- ligatures (iosevka + extra)
-- window-select, popup
+- as the API for our todo system via org-mode and org-agenda.
 
-**Editor:**
-- evil (vim everywhere)
-- dired (file browsing)
-- undo (persistent)
-- vc (git)
+- as an adhoc shared editing and analysis tool.
 
-**Tools:**
-- lookup (documentation navigation)
-- lsp (language servers)
-- magit (git porcelain)
-- tree-sitter (syntax, parsing)
-- eshell, shell (terminals)
-- eval + overlay (run code inline)
+The use of emacs is being driven by the project design of being neutral in tool use:
 
-**Languages:**
-- emacs-lisp, markdown, latex, org (+pomodoro), sh, yaml
-- haskell (via haskell-lite; see below)
+- Experientially, we found that agent support for elisp and emacs usage was limited if human fat fingers were in the [[../buff/loop.md]]. Using our setup, an agent can fully debug elisp code using the actual and live environment being used by itself and the runner.
 
-**Checkers:**
-- syntax, spell
-
-**OS:**
-- macos
+- An agent can also be taught runner moves more easily so that delegation and handoff pipelines work. There will be more efficient ways to spin agents, but emacs is one way a human and AI can carry out identical tasks. This is the one-task principle (see one, do one, teach one), creating a rapid learning loop.
 
 ---
 
-## haskell-lite ⟜ integrated workflow
+## emacsclient: -e or -e -c or -c
 
-Consolidated Haskell development environment. Three packages working together:
+**Targeting the visible frame, or not**
 
-**Core:**
-- `haskell-lite` (github.com/tonyday567/haskell-lite) ⟜ REPL + evaluation overlay (eros.el derived)
-- `haskell-ng-mode` (gitlab.com/tonyday567/haskell-ng-mode, lite-fixes) ⟜ Tree-sitter major mode, replaces haskell-mode
-- `lsp-haskell` (github.com/magthe/lsp-haskell) ⟜ Language Server Protocol bridge to HLS
+- `emacsclient -e` runs elisp in server context and does not open a visible frame.
+- `emacsclient -e -c` runs elisp but also opens a new frame.
+- `emacsclient -c` opens a new frame
 
-**State:** Solid code, library sync broken. All three are functional but got knocked out of alignment in recent refactor.
+There are edge cases where, if the agent starts the server and then a client, the frame will default to the *server* buffer rather than the visible one (if there are any). When in doubt, use `with-selected-frame`:
 
-⊢ haskell-lite consolidation ◊
-  [best practices review] — Before merging packages, study emacs library layout
-  ⟜ create stand-alone branch (ready)
-  ⟜ copy haskell-ng-mode + lsp-haskell into stand-alone
-  ⟜ retest with `doom sync`
-  ⟜ verify composition (no conflicts, clean seams)
-  ⟜ commit
+```bash
+# current buffer in visible frame
+emacsclient -e "(with-selected-frame (car (last (frame-list))) (buffer-name (window-buffer (selected-window))))"
 
-**How it works:**
-1. Major mode (haskell-ng-mode, tree-sitter) for editing
-2. Type info + docs (lsp-haskell → HLS) for IDE features
-3. Interactive dev (haskell-lite REPL + overlay) for exploration
-4. Markdown execution (moving from org-babel to markdown cards)
+# read buffer contents (no properties)
+emacsclient -e "(with-selected-frame (car (last (frame-list))) (with-current-buffer \"*Org Agenda*\" (buffer-substring-no-properties (point-min) (point-max))))"
+```
 
-**Keybindings:**
+### hot loading of fixes
 
-| key        | command                 |
-|------------|-------------------------|
-| `M-n`      | flycheck-next-error     |
-| `M-p`      | flycheck-prev-error     |
-| `SPC m h`  | hoogle-name             |
-| `SPC m p`  | hackage-package         |
-| `SPC m '`  | haskell-ng-repl-run     |
-| `SPC m = =` | ormolu-format-buffer   |
-| `SPC m e e` | eglot                   |
-| `SPC m l l` | lsp                     |
-| `SPC m l r` | lsp-restart             |
-| `SPC m m m` | haskell-lite-repl-overlay |
-| `SPC m m s` | haskell-ng-repl-run     |
-| `SPC m m p` | haskell-lite-prompt     |
-| `SPC m m g` | haskell-lite-run-go     |
-| `SPC m m r` | haskell-lite-repl-restart |
+Restarting emacs is often expensive. Fix up emacs by using elisp without a restart:
 
-See ~/self/buff/haskell-lite.md for full workflow details.
+```bash
+# Eval a function definition (quote lists as '(...))
+emacsclient -e '
+(defun my-func ()
+  "Fixed version."
+  (interactive)
+  (message "updated"))
+'
+
+# Eval multiple statements
+emacsclient -e '(setq my-var 42) (force-mode-line-update)'
+```
 
 ---
 
-## pi-coding-agent ⟜ multi-agent session interface
+## doom
 
-**Keybinding:** `C-c C-p`
+See `~/.config/doom/init.el` for full module list.
 
-Multi-turn agentic development in Emacs. Sessions are immutable `.jsonl` streams with branching.
+**Active modules:** vertico, company, evil, dired, lookup, lsp, magit, tree-sitter, eshell, haskell-ng-mode, org (+pomodoro), spell, syntax.
 
-**Core idea:**
-- Sessions have id/parentId structure (DAG)
-- Fork at any point to spawn parallel conversations
-- Use case: Get 5 different opinions on the same code problem in parallel, from one session root
+**Config files:**
+- `~/.config/doom/init.el` ⟜ Module declarations
+- `~/.config/doom/packages.el` ⟜ Custom package declarations with pins/branches
+- `~/.config/doom/config.el` ⟜ Operational config (28K)
 
-⊢ pi-keymap integration ◊
-  Current state: SPC y menu (which-key) is broken/unused
-  [verify need] — Is SPC y menu actually desired, or is C-c C-p sufficient?
-  ⋆ repair and test which-key groups (7 groups × 34 bindings)
-  ⋆ deprecate SPC y entirely, stick with C-c C-p + transient menu
+Remember to run `doom sync` if packages are affected by changes.
 
-**Working memory for agents:**
-
-When agents read this card on entry, they should know:
-
-1. **Where things are** ⟜ Keybindings are context-specific (see below). Custom packages live in ~/.config/doom/packages.el. Config is ~/.config/doom/config.el.
-2. **How to reach code** ⟜ Haskell: C-c C-p for multi-turn dev. Elisp: Same. Navigation: `SPC s f` (find), `SPC s o` (outline), `SPC b o` (buffer).
-3. **Type/doc lookup** ⟜ Haskell: `SPC m h` (hoogle), `SPC m p` (hackage). Elisp: built-in help. LSP: `SPC m e e` (eglot).
-4. **Eval/test** ⟜ Haskell: `SPC m '` REPL or overlay. Elisp: `C-c C-e`, `M-x ert`.
-5. **Pair flow** ⟜ Use pi-coding-agent for refinement loops. Session branching explores alternatives without losing context.
+**Maintenance notes:**
+- `compat pin: (package! compat :pin "9a234d0")` ⟜ Fixes transient/magit compatibility issue (doomemacs#8089). Pinned to avoid Emacs downgrade issues.
 
 ---
 
-## recent R&D (March 2026)
+## pi-coding-agent interface
 
-**Landscape:** Agent integration in Emacs is rapidly evolving.
+Multi-turn agentic development in Emacs. Sessions are immutable `.jsonl` streams with branching and forking.
 
-**Trending:**
-- `agent-shell` (143⭐) ⟜ Native ACP agent interface (Claude Code, Gemini CLI)
-- `gptel` (83⭐, by karthink) ⟜ Extensible LLM client, shifted to "programmable agents via APIs"
-- `claude-code.el` (71⭐) ⟜ IDE pair programming, strong REPL-bridge work
-- `gptel-agent` (46⭐) ⟜ Agent wrapper with presets
+**Direct keybindings:**
+- `C-c C-c` ⟜ Send prompt (queues follow-up if agent busy)
+- `C-c C-s` ⟜ Queue steering (interrupt after current tool)
+- `C-c C-k` ⟜ Abort streaming
+- `C-c C-r` ⟜ Resume session (from input buffer)
 
-**Patterns:**
-- **Sub-agent spawning** (like pi-coding-agent) is not yet widespread. Most packages focus on single-agent chat or tool-calling loops.
-- **REPL-agent fusion** (interactive eval + agentic flow) is emerging but immature. No canonical pattern yet.
-- **MCP (Model Context Protocol)** becoming integration seam. Karthink views it as bridge for tool orchestration.
+**Chat buffer:**
+- `n / p` ⟜ Navigate messages
+- `TAB` ⟜ Toggle tool output / Cycle all folds with `S-TAB`
+- `RET` ⟜ Visit file at point
 
-**Pain points:**
-- Context management (multi-modal, per-buffer contexts)
-- Tool/agent orchestration (MCP errors, tool call IDs)
-- Workflow clarity (when to use agents vs simple LLM queries)
+**Input buffer:**
+- `M-p / M-n` ⟜ History navigation
+- `TAB` ⟜ Path/file completion
+- `@` ⟜ File reference (search project files)
 
-**Our position:**
-- We use pi-coding-agent (jsonl session branching, not MCP)
-- Our ethos: cards + emacs working memory, not protocols
-- Haskell vision (REPL + overlay + markdown) is ahead of ecosystem
+**Doom leader menu** (`SPC y` prefix):
+- `y RET` / `y SPC` ⟜ Send
+- `y m` ⟜ Select model
+- `y t` ⟜ Cycle thinking level
+- `y T` ⟜ Select thinking level directly
+- `y h` ⟜ Toggle hide thinking blocks
+- `y X` ⟜ Toggle hide tool calls and results
+- `y x` ⟜ Toggle hide results only
+- `y n` ⟜ New session
+- `y r` ⟜ Resume session
+- `y R` ⟜ Reload
+- `y N` ⟜ Name session
+- `y c` ⟜ Compact
+- `y f` ⟜ Fork
+- `y Q` ⟜ Quit
 
----
-
-## MCP reference (future)
-
-If we need to expose Emacs as tool to external agents, these libraries are worth studying:
-
-**elisp-dev-mcp** (github.com/laurynas-biveinski/elisp-dev-mcp)
-- Stdio-based MCP server for Elisp introspection
-- Tools: get-function-definition, get-variable-definition, info-lookup-symbol, eval-expression
-- Security: Restricts file reads to load-path + custom dirs, rejects .. paths
-- Pattern: Tool handlers via `(mcp-register-tool "name" "desc" handler)`, return JSON or error
-
-**emacs-mcp** (github.com/mpontus/emacs-mcp)
-- Introspection server (packages, functions, keybindings, docs)
-- Loads user init on startup (--batch mode) for accuracy
-- Config via mcp.json, Doom bootstrap script
-- Use case: Claude Code agent with live Emacs context
-
-Both are stdio, synchronous, minimal. Study only if/when we need MCP hookup.
+See [pi-coding-agent](https://github.com/dnouri/pi-coding-agent) for full documentation.
 
 ---
 
@@ -192,7 +156,7 @@ Organized by context. Most follow Doom convention: `SPC` (leader) + `m` (major m
 | `M-j`     | avy-isearch                 |
 | `M-n`     | flycheck-next-error         |
 | `M-p`     | flycheck-previous-error     |
-| `C-c C-p` | pi-coding-agent             |
+| `C-c C-p` | pi-coding-agent (transient menu) |
 
 ### markdown
 
@@ -222,29 +186,24 @@ Custom commands:
 
 ---
 
-## config files
+## haskell
 
-- `~/.config/doom/init.el` ⟜ Module declarations
-- `~/.config/doom/config.el` ⟜ Operational config (28K)
-- `~/.config/doom/packages.el` ⟜ Custom package declarations with pins/branches
+See [[~/self/stuff/haskell-lite.md]] for haskell-lite integration (REPL, overlay, tree-sitter).
 
-To modify: Edit .el files, then `doom sync && doom build`.
-
----
-
-## maintenance
-
-**compat pin:** `(package! compat :pin "9a234d0")` ⟜ Fixes transient/magit compatibility issue (doomemacs#8089: "Error in pre-command-hook (transient--pre-command)"). Pinned to specific commit to avoid Emacs downgrade issues.
-
-**Performance:** lsp, tree-sitter are heavy. Monitor startup time.
-
-**Dead code:** SPC y menu is unused. Remove or repair? (See pi-keymap integration note above.)
+**Quick reference:**
+- `SPC m h` ⟜ hoogle lookup
+- `SPC m p` ⟜ hackage lookup
+- `SPC m ' ` ⟜ haskell-ng-repl-run
+- `SPC m m m` ⟜ haskell-lite-repl-overlay
 
 ---
 
-## next
+## tips and trickery
 
-⊢ haskell-lite consolidation ◊ (in progress, pending review)
-⊢ pi-keymap decision ◊ (broken, needs direction)
-⟜ watch MCP maturity (informational only)
-⟜ explore markdown-based Haskell execution (sabela/scripths templates)
+Haskell type/doc lookup ⟡ `SPC m h` (hoogle), `SPC m p` (hackage). LSP: `SPC m l l`.
+
+---
+
+## R&D and alternatives
+
+See [[~/self/stuff/emacs-alt.md]] for alternative agent packages (agent-shell, gptel, claude-code.el) and MCP integration options.

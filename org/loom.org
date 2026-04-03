@@ -1,0 +1,9 @@
+#+title: loom
+
+* ToDo audit browser-tools [[file:../loom/browser-tools.md][browser-tools]]
+* ToDo adapt humanizer and skill-creator [[file:../loom/buff.md][buff]]
+* ToDo intent onboarding experiment [[file:../loom/intent-experiment.md][intent-experiment]]
+* ToDo passages - readme.md graph relationships [[file:../loom/passages.md][passages]]
+* ToDo readme.md alignment with memory-map [[file:../loom/readme-fix.md][readme-fix]]
+* ToDo readme rewrite design [[file:../loom/readme-prompt.md][readme-prompt]]
+* ToDo semantic tail search algorithm [[file:../loom/sem-tail.md][sem-tail]]
