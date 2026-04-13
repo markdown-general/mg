@@ -70,6 +70,20 @@ emacsclient -e '
 emacsclient -e '(setq my-var 42) (force-mode-line-update)'
 ```
 
+### agent elisp workflow
+
+**Problem:** Editing elisp directly causes JSON encoding issues when multi-line code passes through agent tool parameters.
+
+**Solution:** Write elisp as markdown cards (code fence blocks) and load via `emacsclient -e "(load-file \"path.el\")"`.
+
+**Workflow:**
+1. **Compose** ⟜ Write elisp in markdown with code fence blocks and comments
+2. **Review** ⟜ Human reads and optionally edits
+3. **Extract** ⟜ Agent writes fence block content to .el file
+4. **Load** ⟜ `emacsclient -e "(load-file \"path.el\")"`
+5. **Test** ⟜ Run commands, capture output
+6. **Record** ⟜ Add results back to card
+
 ---
 
 ## doom
