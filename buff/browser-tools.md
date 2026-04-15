@@ -54,13 +54,44 @@ We chose a **shared Chrome instance on `:9222`** (shared daemon model) over sing
 | `browser-start.js`      | Launch Chrome with `--remote-debugging-port=9222`    | Background daemon               |
 | `browser-nav.js`        | Navigate to URLs                                     | New tab or current tab          |
 | `browser-content.js`    | Extract readable markdown via Readability + Turndown | Content cleaning                |
-| `browser-eval.js`       | Execute arbitrary JavaScript in current tab          | Query DOM, click, type, extract |
-
-⚠️ **Critical:** `browser-eval.js` operates on the page *currently displayed in the Chrome browser UI*, not on what the agent assumes is active. In multi-agent workflows, the user's visible tab may differ from the agent's last-targeted tab. Always verify current page via `window.location.href` before operating, or use puppeteer directly to target specific tabs by index if certainty is required.
+| `browser-eval.js`       | Execute arbitrary JavaScript in tab (see **Tab Targeting** below) | Query DOM, click, type, extract |
+| `browser-list-tabs.js`  | List all open tabs with URLs (built-in)               | Pre-flight check, tab discovery |
 | `browser-screenshot.js` | Screenshot viewport                                  | Vision context                  |
 | `browser-cookies.js`    | Dump cookies for current domain                      | Auth debugging                  |
 | `browser-pick.js`       | Interactive element picker                           | Selector discovery              |
 | `browser-list-tabs.js`  | List all open tabs (JSON or markdown)                | Tab inventory                   |
+
+---
+
+## Tab Targeting ⚠️
+
+**The Problem:**
+`browser-eval.js` and other tools operate on the **last tab in the array** (`.at(-1)`), not the tab visually active in your browser UI. If you say "I have Claude up right now" but the last tab is GitHub, tools will target GitHub instead.
+
+**The Solution:**
+Always start with `[list-tabs]` to see the current tab layout. Agents see the mapping and can target by index or URL pattern.
+
+**Pattern:**
+```
+⊢ List tabs
+  browser-list-tabs.js
+⊢ Verify target page (Claude, Grok, GitHub, etc.)
+  [Use index from list]
+⊢ Operate on correct tab
+  browser-eval.js "your code" --tab=INDEX
+```
+
+**Example output:**
+```
+4 tabs open:
+
+1. https://ncatlab.org/nlab/show/traced+monoidal+category
+2. https://claude.ai/chat/cba79cdb-bc24-48ed-8d59-74182f70a753
+3. https://www.youtube.com/watch?v=kZ4muU5Wc_4&t=57s
+4. https://github.com/badlogic/pi-mono/tree/main
+```
+
+If the user says "I have the Claude page up", the agent finds index 2 in the list and targets it. If the user says "I'm on GitHub", the agent targets index 4.
 
 ---
 

@@ -227,3 +227,72 @@ allow-newer:
 **Goal:** Keep allow-newer minimal and explicit. Track upstream issues for when bounds get updated.
 
 Ask if documentation of tracked github issues is warranted.
+
+---
+
+## Typed Holes for Primop Integration
+
+When wrapping raw primops (especially unlifted types), manually constructing the wrapper is error-prone because:
+- GHC infers fresh type variables instead of using scoped ones
+- Explicit type signatures can shadow the outer forall
+- The nesting of State# threading is complex
+
+**Technique: Use `_hole` to ask GHC what it needs.**
+
+Instead of guessing the wrapper structure, write:
+
+```haskell
+{-# LANGUAGE MagicHash, UnboxedTuples, ScopedTypeVariables, RankNTypes #-}
+import GHC.Exts
+
+data Tag a = Tag (PromptTag# a)
+
+-- Defer type checking to see what control0# expects
+myWrapper :: forall a b. Tag a -> ((IO b -> IO a) -> IO a) -> IO b
+myWrapper (Tag t) f = IO (control0# t _hole)
+```
+
+Compile with typed holes enabled:
+```bash
+ghc -fdefer-typed-holes -fno-diagnostics-show-caret myfile.hs
+```
+
+GHC outputs the exact type needed:
+
+```
+Found hole:
+  _hole :: ((State# RW -> (# State# RW, b #))
+            -> State# RW -> (# State# RW, a #))
+           -> State# RW -> (# State# RW, a #)
+```
+
+Now you know:
+- The argument is a **function** (takes `g`, returns a computation)
+- `g` is the captured continuation with type `(State# RW -> (# State# RW, b #)) -> State# RW -> (# State# RW, a #)`
+- You must return a computation of type `State# RW -> (# State# RW, a #)`
+
+Use this to build the wrapper correctly.
+
+**Why this works:**
+- ScopedTypeVariables ensures `a` and `b` from the outer `forall` are visible to GHC
+- GHC's type inference respects the signature's quantification
+- You get concrete feedback instead of guessing at lambda structures
+
+This is especially useful for:
+- Primops with complex unlifted/lifted boundaries (catch#, control0#, etc.)
+- Multi-level State# threading
+- Testing wrapper candidates before committing to code
+
+## module type check
+
+A module type check is where:
+
+- Existing type signatures for top-level functions are commented out.
+- GHC inference is checked and any polymorphism or change to signatures is added to get a compile, and then commented in to compare with the old signature.
+
+This can be a fast but comprehesive step to simplifying/verifying/refactoring a Haskell module:
+ - GHC does the type inference work
+ - You immediately see polymorphism, degeneration, or structural flaws hidden ny monomorphism.
+ - Comparing inferred vs. written signatures reveals design intent vs. reality
+ - Minimal changes to get compile—only adding what's necessary
+

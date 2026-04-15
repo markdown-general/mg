@@ -8,6 +8,18 @@ All operations execute JavaScript in browser context via `browser-eval.js` (no r
 
 ---
 
+## Tab Targeting ⚠️
+
+**Before any chat operation:** List tabs to find the correct Claude instance.
+
+```bash
+browser-list-tabs.js
+```
+
+If the user says "I have Claude up right now", find Claude's URL in the tab list and note its index. All subsequent operations target that index. See **buff/browser-tools.md > Tab Targeting** for details.
+
+---
+
 ## Core Operations
 
 All operations execute JavaScript in browser context via `browser-eval.js`. No restart, no reconnect.

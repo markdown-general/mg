@@ -1,4 +1,4 @@
-* Next pi extensions and setup
+* ToDo pi extensions and setup
 
 https://github.com/ifiokjr/oh-pi/
 
