@@ -283,6 +283,68 @@ This is especially useful for:
 - Multi-level State# threading
 - Testing wrapper candidates before committing to code
 
+## Markdown cards with literate Haskell and doctest
+
+**Pattern:** Source truth lives in markdown cards. Haskell code examples extract, compile, and validate via doctests.
+
+**Workflow:**
+
+1. **Write card** ⟜ `other/my-card.md` with Haskell fence blocks containing `>>>` examples in Haddock comments
+   ```markdown
+   # My Card
+   
+   Prose describing the pattern.
+   
+   \`\`\`haskell
+   module MyModule where
+   
+   -- | Function with example.
+   --
+   -- >>> myFunc 5
+   -- 10
+   myFunc x = x * 2
+   \`\`\`
+   ```
+
+2. **Extract code** ⟜ Run markdown-unlit to generate .hs from .md
+   ```bash
+   markdown-unlit -h other/my-card.md other/my-card.md other/MyModule.hs
+   ```
+
+3. **Test examples** ⟜ doctest validates all `>>>` examples in Haddock comments
+   ```bash
+   cabal test doctests
+   ```
+
+**Cabal setup:**
+
+```cabal
+test-suite doctests
+  type:             exitcode-stdio-1.0
+  hs-source-dirs:   test
+  main-is:          doctests.hs
+  ghc-options:      -threaded
+  build-depends:    base, doctest >= 0.8
+  default-language: GHC2024
+```
+
+**Test harness** (`test/doctests.hs`):
+
+```haskell
+module Main where
+import Test.DocTest
+
+main :: IO ()
+main = doctest ["other/MyModule.hs"]  -- Add more .hs files as needed
+```
+
+**Notes:**
+- Markdown source files can use kebab-case: `lazy-knot-tying.md`
+- Extracted .hs files must use CamelCase: `LazyKnotTying.hs`
+- markdown-unlit is from the same author as doctest (sol/markdown-unlit)
+- doctest (not doctest-parallel) handles explicit file paths cleanly
+- Haddock comments with `>>>` are the single source of truth for examples
+
 ## module type check
 
 A module type check is where:
