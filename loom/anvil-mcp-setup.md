@@ -37,3 +37,7 @@
 
 ⊢ Phase 7: Commit
   - `cd ~/mg && git add -A && git commit -m "add anvil mcp setup"`
+
+---
+
+**Next:** loom/pi-mcp-setup.md ⟜ Connect anvil to pi agents via pi-mcp-adapter (LLM-agnostic)
