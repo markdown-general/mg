@@ -43,15 +43,32 @@ The use of emacs is being driven by the project design of being neutral in tool 
 - `emacsclient -e -c` runs elisp but also opens a new frame.
 - `emacsclient -c` opens a new frame
 
-There are edge cases where, if the agent starts the server and then a client, the frame will default to the *server* buffer rather than the visible one (if there are any). When in doubt, use `with-selected-frame`:
+**Gotcha:** Frame selection is fragile.
+
+`emacsclient -e "(buffer-name (current-buffer))"` returns the *server* buffer, not your visible editing buffer. Frame order is unpredictable because:
+- Minibuffer appears/disappears as processes run and warnings fire
+- Old emacsclient instances linger as stale frames
+- Cursor movement by running code shifts which frame is "active"
+- The *server* buffer is always present but never what you want
+
+**Don't use `with-selected-frame`**. Use `with-current-buffer` instead, targeting by name:
 
 ```bash
-# current buffer in visible frame
-emacsclient -e "(with-selected-frame (car (last (frame-list))) (buffer-name (window-buffer (selected-window))))"
+# Direct access by buffer name (reliable)
+emacsclient -e "(with-current-buffer \"loop-examples.md\" (buffer-substring-no-properties (region-beginning) (region-end)))"
 
-# read buffer contents (no properties)
-emacsclient -e "(with-selected-frame (car (last (frame-list))) (with-current-buffer \"*Org Agenda*\" (buffer-substring-no-properties (point-min) (point-max))))"
+# Get the list of actual buffers (when you need to discover a buffer name)
+emacsclient -e "(mapcar #'buffer-name (buffer-list))"
 ```
+
+**If you must find visible frames** (rare), check visibility:
+
+```bash
+# Frame list with visibility and buffer names
+emacsclient -e "(mapcar (lambda (f) (list (buffer-name (window-buffer (frame-selected-window f))) (frame-visible-p f))) (frame-list))"
+```
+
+This shows which frames are actually visible (`t`) vs modal/stale (`nil`). But still: **prefer `with-current-buffer` with an explicit buffer name.**
 
 ### hot loading of fixes
 

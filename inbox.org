@@ -1,0 +1,7 @@
+#+title: mg inbox
+
+* Next circuits
+* Next unlit
+* Next tidyup
+* ToDo pi extensions and setup
+** ToDo adapt humanizer and skill-creator
