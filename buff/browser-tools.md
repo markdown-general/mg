@@ -1,47 +1,21 @@
-# browser-tools ⟜ extending pi-skills for multi-agent chat coordination
+# browser-tools ⟜ shared Chrome daemon for multi-agent browser automation
 
-**Location:** `~/other/pi-skills/browser-tools/` on `browser-chat` feature branch
+**Location:** `~/other/pi-skills/browser-tools/` on `browser-chat` branch
 
-**Origin:** Extension of badlogic/pi-skills (pi-coding-agent author). We work directly in the upstream repo on a feature branch, making it easy to track changes, rebase on upstream updates, and contribute back.
-
-**Setup:**
+**Launch:**
 ```bash
-cd ~/other/pi-skills
-git checkout browser-chat  # Our extensions branch
-cd browser-tools
-npm install
-node browser-start.js --profile &  # Start daemon
+chrome-open-macos.sh --profile
 ```
 
 ---
 
-## Design Philosophy
-
-**Criterion:** Technology we can replicate ourselves. No black boxes, no frameworks we don't own.
-
-### Architecture: Shared Chrome Daemon
+## Architecture: Shared Chrome Daemon on :9222
 
 We chose a **shared Chrome instance on `:9222`** (shared daemon model) over single-use patterns.
 
-**Why:**
-- Chrome runs independently via `browser-start.js --profile`, persists on localhost:9222
-- Chrome *is* the daemon—it outlives any agent operation
-- Multiple agents connect simultaneously via CDP, work on separate tabs
-- puppeteer-core is just protocol bindings (no 100MB browser binaries bundled)
-- Cheaper connection lifecycle (one persistent browser, many agent connections)
+One Chrome instance on localhost:9222. Multiple agents connect via CDP. Each agent works on separate tabs. No per-session daemon overhead.
 
-**Alternatives considered:**
-- **agent-browser** (Vercel Labs): Adds 100MB of Chromium binaries, daemon-per-session lifecycle, Playwright abstraction we don't own. Good ideas (ARIA snapshot/ref system), but unnecessary weight.
-- **single-agent browser library**: Works for one agent at a time; doesn't fit multi-agent coordination.
-
-**What's reusable from agent-browser:**
-- ARIA snapshot/ref system (for cleaner selectors)
-- Tab isolation pattern (already our model)
-
-**What we don't need:**
-- Daemon lifecycle management (Chrome handles this)
-- Session-scoped browser ownership (we share one Chrome)
-- Playwright abstraction (raw CDP via puppeteer-core suffices)
+Uses puppeteer-core (just protocol bindings) instead of full browser bundles.
 
 ---
 

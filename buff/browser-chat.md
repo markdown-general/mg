@@ -10,13 +10,17 @@ All operations execute JavaScript in browser context via `browser-eval.js` (no r
 
 ## Tab Targeting ⚠️
 
-**Before any chat operation:** List tabs to find the correct Claude instance.
+**Before any browser operation:** Check current tab with `browser-list-tabs.js`. If it's not the tab you want to work with, say so. Do not assume.
 
-```bash
-browser-list-tabs.js
-```
+---
 
-If the user says "I have Claude up right now", find Claude's URL in the tab list and note its index. All subsequent operations target that index. See **buff/browser-tools.md > Tab Targeting** for details.
+## System Selectors
+
+| System | Input | Send | Attach |
+|--------|-------|------|--------|
+| **Claude** | `[data-testid="chat-input"]` | `button svg[viewBox="0 0 256 256"]` | `input[type="file"]` |
+| **Grok** | `.tiptap.ProseMirror` | `button.group.flex.flex-col.justify-center.rounded-full` | `button[aria-label="Attach"]` |
+| **Thaura** | `textarea` | `button[type="submit"][aria-label="Send message"]` | `input[type="file"]` |
 
 ---
 
@@ -92,20 +96,15 @@ browser-eval.js "Array.from(document.querySelectorAll('.message-bubble')).map(b 
 
 Cards reference these by name. Implementation can be bash, Node, TypeScript, or elsewere—what matters is the operation is named and documented.
 
-### [read-response-TYPE]
+### [read-response]
 
-Extract conversation from named system. 
+Extract current page to stdout.
 
 ```bash
-# [read-response-claude]
-browser-eval.js "document.body.innerText" > ~/mg/logs/claude-response.txt
-
-# [read-response-grok]
-browser-eval.js "document.body.innerText" > ~/mg/logs/grok-response.txt
-
-# [read-response-thaura]
-browser-eval.js "document.body.innerText" > ~/mg/logs/thaura-response.txt
+browser-eval.js "document.body.innerText"
 ```
+
+Redirect or save as needed.
 
 ### [send-to-TYPE]
 
