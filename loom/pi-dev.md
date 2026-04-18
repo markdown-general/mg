@@ -16,3 +16,5 @@ https://pi.dev/packages
 ⟝ Functional and Haskell coding skills
 ⟝ improve our capabailities as much as we can as fast as we can
 ⟝ Find out what others do.
+
+https://www.npmjs.com/package/pi-agent-browser-native
