@@ -37,109 +37,11 @@ Full papers and authoritative sources (404KB, 12 files):
 
 ---
 
-## Next Work (Prioritized)
+## Next Work
 
-### 1. Axiom Formalization — Mendler Case as Counit Naturality
+**Task tracking:** → circuits-tasks.md
 
-**Goal:** Close the major open question: prove Mendler case in `run` is exactly counit naturality of `Ran (Const a) (Const b)`.
-
-**Language choice:** Lean 4 vs Idris2?
-- Lean 4: better category theory library support, larger ecosystem, mature tactics
-- Idris2: more research-oriented, dependent patterns cleaner for Kan extensions
-- **Recommendation:** Lean 4 for practical formalization + adoption
-
-**Scope:**
-- Establish isomorphism `Circuit a b ~ Ran (Const a) (Const b)` as theorem
-- Prove `run` satisfies counit naturality
-- Show Mendler case enforces this (without it, universal property breaks)
-- Formalize the triangle: `lower . unfold = run` as unit-counit identity
-
-**Payoff:** Elevates readme open question into proven theorem. Strengthens categorical foundation for library credibility.
-
----
-
-### 2. Concrete Examples (KW + Effects + Performance)
-
-**Primary examples (map to Circuit/Hyp, show (,) vs Either):**
-- Breadth-first search (KW 2026, Hofmann algorithm)
-- Coroutine scheduler (concurrent feedback patterns)
-- Zip fusion on Church-encoded lists
-- Simple state machine with internal feedback
-
-**Secondary examples (effects libraries struggle with simultaneity):**
-- Resource acquisition/release with feedback (why Either-based libs need `bracket`)
-- Error handling with recovery loops (Either is sequential, (,) is simultaneous)
-- Stream merging / concurrent pipelines (expose the approximation cost)
-
-**Performance measurement (in parallel):**
-- Instrument each example with timing data
-- Measure left-nested Compose vs right-nested vs Hyp encoding
-- Profile Loop depth distribution
-- Flag if O(n²) behavior surfaces — triggers RwR treatment
-
-⟝ **Start with BFS (small, clean, illuminating)**
-
----
-
-### 3. API: Dual Word/Symbol Interface
-
-**Current constraint:** JSON encoding bug prevents KW symbols in code. **Preserve symbol definitions; we'll restore at end.**
-
-**Target interface (word + symbol):**
-```haskell
--- Word versions (available now)
-lift :: (a -> b) -> Circuit a b
-compose :: Circuit b c -> Circuit a b -> Circuit a c  -- or via Category instance
-run :: Circuit a a -> a
-loop :: Trace arr t => arr (t a b) (t a c) -> Circuit arr t b c
-
--- Symbol versions (reserved for later)
--- lift f  :: a ↬ b
--- f ⊙ g   :: Circuit composition  
--- run h   :: a ↬ a -> a
--- f ⊲ h   :: Loop / prepend
-```
-
-**Why dual interface:** Users choose readability; libraries can use symbols for notation once JSON bug is fixed.
-
----
-
-### 4. Clarify and Expand Critical Sections
-
-#### 4a. "Recovers fix in cartesian case" — needs deeper exposition
-
-Hasegawa's Theorem 3.1: in a **cartesian** traced category, trace is *equivalent* to a fixed-point operator satisfying Conway axioms. This means:
-
-- `run (lift f) = fix f` is **not arbitrary** — it's a theorem consequence
-- In any cartesian traced category, these must agree extensionally
-- Operationally different (cyclic sharing vs fixed-point combinator resource duplication) but denotationally same
-
-**Action:** Expand "Hasegawa's cartesian specialisation" section in readme with:
-- Precise statement of Theorem 3.1
-- Why cartesian (not just monoidal) is necessary
-- Connection to why either-based libs *can't* have simultaneity without approximation
-
-#### 4b. "Graded Loop depth" — explain and measure
-
-**Concept:** Annotate each `Loop` constructor with a depth index. Enables:
-- Static analysis of nesting structure
-- Okasaki-style amortised complexity reasoning
-- Early detection of degenerate (left-nested) patterns
-
-**Example:**
-```haskell
-data Circuit arr t a b where
-  Lift :: arr a b -> Circuit arr t a b
-  Compose :: Circuit arr t b c -> Circuit arr t a b -> Circuit arr t a c
-  Loop :: Nat -> arr (t a b) (t a c) -> Circuit arr t b c  -- depth annotation
-```
-
-Then: prove that `left-nested Compose` over `Loop`s increases depth quadratically, enabling warning/optimization.
-
-**Action:** 
-- Implement graded variant in haskell/circuits/ (parallel to examples)
-- Measure depth distribution in real examples
-- Document performance implications in readme
+For current priorities, open questions, and work status, see circuits-tasks.md. This file is the design reference; circuits-tasks.md is the working surface.
 
 ---
 
@@ -247,18 +149,6 @@ Reference: Donnacha Oisín Kidney & Nicolas Wu, "Hyperfunctions: Communicating C
 ---
 
 
-
----
-
-## Open Questions & Notes
-
-⟝ Does axiom 6 (LKS) = axiom 7 (sliding) = Mendler case? Verify with papers.
-
-⟝ Profunctors: Strong/Costrong modules vs our design — orthogonal or subsumed? (See profunctors library)
-
-⟝ Graded structures (Knot depth) and Okasaki amortisation — defer for now, flag in final docs
-
-⟝ Geometry of Interaction: Currently conjectural; needs better motivation. GoI.md + ~/mg/logs/ provide foundation, but formal mapping to Circuit/Hyp is open.
 
 ---
 

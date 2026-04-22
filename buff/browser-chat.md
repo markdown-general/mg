@@ -18,7 +18,7 @@ All operations execute JavaScript in browser context via `browser-eval.js` (no r
 
 | System | Input | Send | Attach |
 |--------|-------|------|--------|
-| **Claude** | `[data-testid="chat-input"]` | `button svg[viewBox="0 0 256 256"]` | `input[type="file"]` |
+| **Claude** | `[data-testid="chat-input"]` | `button[aria-label="Send message"]` | `input[type="file"]` |
 | **Grok** | `.tiptap.ProseMirror` | `button.group.flex.flex-col.justify-center.rounded-full` | `button[aria-label="Attach"]` |
 | **Thaura** | `textarea` | `button[type="submit"][aria-label="Send message"]` | `input[type="file"]` |
 
@@ -66,7 +66,7 @@ Click the send button:
 
 ```bash
 # Claude
-browser-eval.js "document.querySelector('button svg[viewBox=\"0 0 256 256\"]').closest('button').click()"
+browser-eval.js "document.querySelector('button[aria-label=\"Send message\"]').click()"
 
 # Grok
 browser-eval.js "document.querySelector('button.group.flex.flex-col.justify-center.rounded-full').click()"
@@ -152,23 +152,42 @@ sleep 8
 
 **Input selector:** `[data-testid="chat-input"]` (contenteditable div)
 
-**Send button selector:** `button svg[viewBox="0 0 256 256"]` → `.closest('button')`
+**Send button selector:** `button[aria-label="Send message"]`
 
 **Conversation selector:** `p.whitespace-pre-wrap` (message bubbles) or `document.body.innerText`
 
-**Sidebar:** `span.truncate` (chat titles in `<a>` links)
+**Logged in:** `document.body.innerText.includes('Hey there,')` — welcome splash varies, just check presence
+
+**Right page check:**
+```javascript
+({ url: document.URL, loggedIn: document.body.innerText.includes('Hey there,'), inputReady: document.querySelector('[data-testid="chat-input"]') !== null })
+```
+
+**New chat:** Navigate to `https://claude.ai/new`. Use `--new` flag on `browser-nav.js` if no tabs open yet.
+
+**Sidebar:** Closed by default (width:0 in DOM, not visible). Toggle: `button[aria-label="Open sidebar"]`. Conversations: `ul.flex.flex-col li span.truncate`.
 
 **Quirks:**
 - Contenteditable div (simpler than Grok's TipTap)
 - Multi-line via `.innerText` (preserves newlines)
 - Bare Return sends (use paste, not keyboard.type)
-- Send button only appears when input has text
+- Send button absent until input has text — inject prompt first, then click send ⚠️
+- Verify send worked: URL changes from `/new` to `/chat/[id]`
 - Stream completes: 3-8 seconds typical
+- DevTools open = browser-eval.js targets DevTools tab not Claude — close DevTools first ⚠️
+- DOM includes hidden sidebar content — width:0 elements present in DOM but not visible to user
 
-**File upload:**
-- `+` button below input area
-- Hidden `<input type="file">` element
-- Supports: .md, .txt, .pdf (via Anthropic processing)
+**File upload:** Use `browser-upload.js`:
+```bash
+browser-upload.js /path/to/file1.md /path/to/file2.md
+```
+Writes directly to hidden `input[type="file"]` via puppeteer `uploadFile()`. No dialog. Supports .md, .txt, .pdf.
+
+**Download artifact:** Claude renders created files with a Download button at the end of the response.
+```bash
+browser-eval.js "document.querySelector('button[aria-label=\"Download [title]\"]').click()"
+```
+File saves to ~/Downloads/. Move to ~/mg/logs/ after.
 
 ### Grok
 
@@ -291,6 +310,12 @@ If send fails or input not found:
 
 **Cross-system excerpt:** When passing from Claude to Grok, extract key sections only (first 50 lines, not full conversation). Reduces token load.
 
+**Dump to file, don't read:** Extraction is a file operation — don't consume the content.
+```bash
+browser-content.js URL > ~/mg/logs/name-$(date +%s).md
+```
+Decide later whether to read it. Keeps token budget for actual work.
+
 ---
 
 ## Known Failure Modes
@@ -302,6 +327,7 @@ If send fails or input not found:
 | Bare Return sends too early | Using keyboard.type instead of paste | Use `.innerText = text` (paste) |
 | Message extraction incomplete | Stream still running | Increase wait time before `[read-response-TYPE]` |
 | File upload fails | Hidden input missing or wrong selector | Check selector with browser-pick.js |
+| browser-eval.js targeting wrong tab | DevTools is open — it becomes the last tab | Close DevTools first |
 | CDP connection lost | Chrome crashed or hung | Restart: `browser-start.js --profile &` |
 | Special chars break input | Bash quoting in single-line commands | Use temp files or escape properly |
 
@@ -339,7 +365,6 @@ Timestamps let yin reconstruct conversation flow and agent decisions.
 ## Future Extensions
 
 **Planned:**
-- File upload mechanics (Claude, Grok, others)
 - Session recovery (resume broken conversation)
 - Rate limiting (avoid rate-limit blocks)
 - Vision model integration (browser-screenshot.js + vision context)

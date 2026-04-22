@@ -283,15 +283,51 @@ This is especially useful for:
 - Multi-level State# threading
 - Testing wrapper candidates before committing to code
 
-## run-haskell-markdown
+## Markdown cards as doctest repositories
+
+Cards are **complete, working designs** with prose, code, and doctests. They are doctest repositories waiting for tooling to mature.
+
+**Current workflow (manual extraction & testing):**
+
+Cards contain fence blocks with doctests in comments. Extract and test:
 
 ```bash
-~/self/scripts/run-haskell-markdown other/lazy-knot-tying.md
+# Extract fence blocks to temporary .hs file
+markdown-unlit -h card.md card.md /tmp/card.hs
+
+# Run doctests on extracted file
+cabal exec doctest -- /tmp/card.hs
 ```
 
-run-haskell-markdown is a helper for checking cards that contain complete examples, with doctests and mixing of prose, alternative implementations, examples, proofs and tests.
+All doctests in the extracted file should pass. When they do, the card is a **valid, working design**.
 
-The card is run the entire card as a script in sequence, and represents a quick test on refactors and change.
+**Future:** When markdown-unlit and cabal integration matures, this extraction will be automatic.
+
+**What cards contain:**
+
+- Prose narrative (design explanation, reasoning, context)
+- Haskell fence blocks with doctests in comments
+- Alternative implementations (reference forms, design witnesses)
+- Examples with doctest validation
+- Mermaid diagrams and visual reasoning
+
+**Guidelines for writing cards:**
+
+- Include doctests in fence block comments (`-- >>>` format)
+- Use `import` statements at the top of fence blocks
+- Keep examples focused and representative
+- A passing doctest means the card's design is validated and ready
+- A broken card is a bug—doctests verify it's not
+
+**Testing flow:**
+
+1. Write card with narrative + fence blocks + doctests
+2. Extract with markdown-unlit
+3. Run doctests on extracted .hs file
+4. Passing doctests = card is a valid, ready-to-use design
+5. Commit card as proof-by-narrative
+
+**Note:** Markdown cards are NOT integrated into cabal build stanzas. The *.md files are reference material and doctest repositories. Testing happens via manual extraction; when technology catches up, integration will be automatic. Haddock doctests in module definitions are still the standard for compiled libraries.
 
 ## module type check
 

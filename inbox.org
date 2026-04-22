@@ -2,6 +2,12 @@
 
 * Next circuits
 * Next unlit
+* ✓ Tidyup 2026-04-19
+** ✓ browser-tools-fixes archived (process improved)
+** ✓ unlit.md archived (workflow ready)
+** ✓ pdf-pipeline-best-practice kept (excellent card)
+** ⊢ pi-dev and stack.md review pending
 * Next tidyup
 * ToDo pi extensions and setup
 ** ToDo adapt humanizer and skill-creator
+* ToDo https://github.com/kepano/obsidian-skills

@@ -1,10 +1,29 @@
 ---
 
-This is mg: a system for multi-agent development in markdown.
+This is mg: generally a system for markdown.
 
 ![design](design.svg)
 
 ---
+
+## mark
+
+mark is a very simple language to understand. We use symbols extensively, as communication shortcuts, and parallel tracks through linear narrative. 
+
+When someone want to note a pattern or regularity in markdown, it is as simple as making a mark. 
+
+For example,
+
+🟢 is our friendly way of saying excellently done!
+ 🚩 is our way of saying watch out, fail over here, be careful, unverified.
+
+I made that up, but a sea of special green blobs is a nice card to read, and you want to hop to those red flags. We don't need a key map, just like we dont need a dictionary. But also, marks are made to be glossed over, especially because we surface marks in the content itself and are meant to be ephemeral.
+
+The two most common marks:
+
+⟜ is a general mark, often meaning `an elaboration of`, an elab. But it is also just the default dash.
+⟝ is a point of action: tagging a task or defining an edge to a problem. It is the default TODO|FIXME tag.
+
 
 markdown ⟡ general ⟜ words know themselves by the company they keep
 
@@ -341,10 +360,12 @@ The library is asynchronous for most agents and operators. Tasks, context and pr
 The library structure undergoes transformation fairly consistently. This is the current set:
 
 - **core/** ⟜ foundational patterns you work on constantly; canonical cards for pattern recognition
-- **buff/** ⟜ buffers/compression of core knowledge; capability amplifiers and configuration upgrades
-- **loom/** ⟜ where yin and operator swap notes; conversation space
+- **buff/** ⟜ specialist knowledge and capability upgrades; reusable patterns (haskell-checklist, session, lattice, loop, duality, etc.)
+- **loom/** ⟜ active project cards and shared working surface; current work lives here (reference + task tracking)
 - **word/** ⟜ words we love and think about a lot; our semantic edge
 - **logs/** ⟜ use this instead of /tmp/; backed up overnight.
+
+**Distinction:** buff holds reusable patterns; loom holds current project state. When starting work, check loom first. When building domain expertise, load relevant buff cards.
 
 ⊲ general section
 
