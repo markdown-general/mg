@@ -189,6 +189,39 @@ Organized by context. Most follow Doom convention: `SPC` (leader) + `m` (major m
 | `M-p`     | flycheck-previous-error     |
 | `C-c C-p` | pi-coding-agent (transient menu) |
 
+#### insert symbol (SPC i prefix)
+
+**Circles** `SPC i c` — Status/flow color markers
+| key       | symbol  |
+|-----------|----------|
+| `SPC i c g` | 🟢 |
+| `SPC i c o` | 🟠 |
+| `SPC i c r` | 🔴 |
+| `SPC i c b` | 🔵 |
+| `SPC i c p` | 🟣 |
+
+**Marks** `SPC i m` — Core mg marks
+| key       | symbol  | description   |
+|-----------|---------|---------------|
+| `SPC i m e` | ⟜ | elab          |
+| `SPC i m a` | ⟝ | action/gate   |
+| `SPC i m ]` | ⟞ | right gate    |
+| `SPC i m l` | ◊ | lozenge       |
+| `SPC i m h` | ⬡ | hexagon       |
+| `SPC i m w` | ⧈ | weave         |
+
+**Symbols** `SPC i s` — Circuit/hyper notation
+| key       | symbol  | description   |
+|-----------|---------|---------------|
+| `SPC i s l` | η | lift          |
+| `SPC i s w` | ε | lower         |
+| `SPC i s .` | ⊙ | compose       |
+| `SPC i s p` | ⊲ | push          |
+| `SPC i s o` | ↬ | loop          |
+| `SPC i s r` | ⥁ | run           |
+| `SPC i s t` | ⥀ | trace         |
+| `SPC i s u` | ↯ | untrace       |
+
 ### markdown
 
 | key         | command                     |

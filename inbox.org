@@ -1,7 +1,6 @@
 #+title: mg inbox
 
 * Next circuits
-* Next unlit
 * ✓ Tidyup 2026-04-19
 ** ✓ browser-tools-fixes archived (process improved)
 ** ✓ unlit.md archived (workflow ready)
@@ -11,3 +10,7 @@
 * ToDo pi extensions and setup
 ** ToDo adapt humanizer and skill-creator
 * ToDo https://github.com/kepano/obsidian-skills
+* ToDo https://www.conventionalcommits.org/en/v1.0.0/
+* ToDo https://github.com/msakai/cpl
+
+The adjunctions of base.
