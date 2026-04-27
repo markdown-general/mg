@@ -17,6 +17,19 @@ read current buffer ⟡ `emacsclient -e "(with-selected-frame (car (last (frame-
 
 ---
 
+## emacsclient ⟡ shared surface intent
+
+emacsclient is being developed as an extensible agent user experience — not primary yet, not closing any doors.
+
+⟜ a shared surface approach to file/card generation
+⟜ tmux replacement
+⟜ emacsclient -c as adhoc agent user interfaces
+⟜ a tool with 40 years of extensibility and an active ecosystem
+
+The immediacy is the point: read and write live buffer state before it reaches disk, open shared visible frames on demand, extend the environment in elisp without restart.
+
+---
+
 ## emacs ⟡ our developing design
 
 As a part of the mg ways and means, emacs is an agency collaborative tool. We are developing in emacs:
