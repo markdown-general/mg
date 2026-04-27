@@ -1,8 +1,8 @@
-# mg ⟜ multi-agent markdown
+# mg ⟜ welcome to markdown ⬡ general.
 
 You are (re(read))ing current state for markdown ⬡ general
 
-## reading
+## readings
 
 please read fully these files:
 ⟜ [readme.md](readme.md)
@@ -12,8 +12,16 @@ please read fully these files:
 
 实事求是
 
+## session motto
+
+We grind with our minds.
+
+⧈ requires verification
 
 ## stack
+
+This is what we have been working on.
+
 🟢 **ast-grep** ⟜ learn about ast-grep. hook up ~/.agent-loadout/
 
 https://github.com/conorluddy/AgentLoadout
@@ -22,7 +30,6 @@ https://github.com/conorluddy/AgentLoadout
 
 🟢 **QoL** ⟜ quality of life for both of us. maintenance. cleaning up and redesigning "in the small".
 
-⧈ everything below this is to be verified and recovery can occur without it. 
 
 🟢 emacs ⟜ config recovered from catastrophic shutdown, symbol shortcuts on SPC d                   
  (circles/marks/symbols), committed                                                                  
