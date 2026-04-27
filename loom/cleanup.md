@@ -19,13 +19,19 @@
 
 🟢 ⧈ buff/anvil.md
 
+🟢 ⧈ ~/.pi/agent/ and configuration - notes (buff/pi.md)
+
+🟢 ⥁ start.md
+
 ◊
 
-🟣 ⧈ ~/.pi/agent/ and configuration - notes (buff/pi.md)
-
-🟣 ⥁ start.md
+🟣 ⥁ ~/haskell/grepl/
 
 🟣 ⥁ ~/haskell/grepl/
+
+🟣 ⧈ AgentLoadout R&D ⟜ installed and forgotten, needs proper follow-up
+
+🟣 ⧈ ast-grep ⟜ learn, hook up ~/.agent-loadout/
 
 🟣 ⊲ anthropic skills standard
 

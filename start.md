@@ -20,21 +20,16 @@ We grind with our minds.
 
 ## stack
 
-This is what we have been working on.
+Organization base for context and rapid task switching (hypothesis: reduces switching cost).
 
-🟢 **ast-grep** ⟜ learn about ast-grep. hook up ~/.agent-loadout/
+🔴 **circuits** ⟜ blocked on grepl; loom/ active workspace, ~/haskell/circuits/ active repo
 
-https://github.com/conorluddy/AgentLoadout
+🔴 **grepl** ⟜ major task, blocking circuits
 
-🟢 **circuits** ⟜ loom/ is active workspace. ⟜ ~/haskell/circuits/ is the active repo (working in main)
+🟢 circuits/other/ ⟜ 7-section narrative arc (01-07), circuit-categorical reference map, learners buff, committed
 
-🟢 **QoL** ⟜ quality of life for both of us. maintenance. cleaning up and redesigning "in the small".
+🟢 loom/circuits.md ⟜ active workspace card with research list and engineering gaps
 
-
-🟢 emacs ⟜ config recovered from catastrophic shutdown, symbol shortcuts on SPC d                   
- (circles/marks/symbols), committed                                                                  
- 🟢 circuits/other/ ⟜ 7-section narrative arc (01-07), circuit-categorical reference map, learners   
- buff, all committed                                                                                 
- 🟢 loom/circuits.md ⟜ active workspace card with research list and engineering gaps                 
+🟢 emacs ⟜ shared surface for immediate agent-runner interaction via emacsclient (live buffer state, async bridge)                 
                                                                                                      
  实事求是. Thanks!           
