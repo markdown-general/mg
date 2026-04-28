@@ -330,3 +330,160 @@ Verify with:
 ghcup list -c set -r
 which hlint ormolu hkgr cabal-gild cabal-docspec
 ```
+
+---
+
+## Case Study: grepl ⟜ Applying the Checklist
+
+**Project:** ~/haskell/grepl (REPL I/O protocol for agents)
+
+**Status:** Engineered, compiles cleanly. Needs standardization.
+
+**Checklist Application:**
+
+### Documentation Gap
+
+**Current:** No readme.md, missing module headers (Grepl, Grepl.Watcher)
+
+**Action:** Create readme.md with:
+- Title: "grepl — Agent-Friendly REPL I/O Protocol"
+- Problem: Agents need bidirectional REPL interaction; named pipes solve buffering issues
+- Architecture: ChannelConfig pattern, FSNotify watcher, PTY spawning
+- Usage: Basic example (cabal repl setup) + PTY interaction example (spawnCabalRepl)
+- Design philosophy: Why aux primitives matter (aux ≠ replacement, agent-optimized primitives)
+- Related: Grepl.CircuitDev for interactive development, cards/dev-guide.md for patterns
+
+**Action:** Add haddock module headers:
+```haskell
+-- | Grepl: REPL protocol for agent-to-GHCi communication.
+-- 
+-- = Architecture
+-- 
+-- Grepl uses named pipes (FIFOs) for decoupled I/O:
+-- - stdin/stdout/stderr redirected to separate files
+-- - Prevents buffering issues when agents interact with @cabal repl@
+-- - Process lifecycle independent of I/O consumption
+-- 
+-- = Usage
+-- 
+-- For interactive development, use 'Grepl.CircuitDev':
+--
+-- > import Grepl.CircuitDev
+-- > (pty, ph) <- spawnCabalRepl
+-- > writePty pty "1 + 1\n"
+-- > output <- readPty pty
+--
+module Grepl where
+```
+
+### Metadata Updates
+
+**Current:** author = "Anonymous", tested-with = GHC 9.14.1 only
+
+**Action:** Update grepl.cabal:
+```cabal
+author:              Tony Day
+maintainer:          tonyday567@gmail.com
+
+tested-with:
+  ghc ==9.14.1,
+  ghc ==9.12.2,
+  ghc ==9.10.1
+```
+
+**Action:** Populate CHANGELOG.md:
+```markdown
+# Changelog
+
+## 0.1.0.0 — 2026-04-28
+
+- Initial release
+- Named pipe protocol for REPL communication (ChannelConfig, piping)
+- PTY spawning (spawnCabalRepl, spawnCmd)
+- FSNotify watcher for file-based triggers (Grepl.Watcher)
+- Grepl.CircuitDev module for interactive circuit development
+- posix-pty integration for live cabal repl processes
+```
+
+### Code Quality
+
+**Actions:**
+```bash
+cd ~/haskell/grepl
+
+# Format
+cabal-gild --io=grepl.cabal
+ormolu --mode inplace $(git ls-files '*.hs')
+
+# Lint
+hlint .
+
+# Build clean
+cabal clean && cabal build --ghc-options=-Wunused-packages
+
+# Test
+cabal-docspec
+
+# Haddock
+cabal haddock
+```
+
+Expect: 100% haddock coverage after module header additions.
+
+### CI Workflow
+
+**Current:** CI workflow missing (check .github/workflows/)
+
+**Action:** Copy template:
+```bash
+cp ~/haskell/numhask-space/.github/workflows/haskell-ci.yml ~/haskell/grepl/.github/workflows/
+```
+
+Update matrix to test GHC 9.14, 9.12, 9.10.
+
+### Dependency Verification
+
+**Current:** posix-pty dependency (posix only—note platform constraint)
+
+**Verify:** cabal.project correctly references circuits as local dependency
+
+```cabal
+packages:
+  grepl.cabal
+
+source-repository-package
+  type: git
+  location: https://github.com/tonyday567/circuits.git
+  branch: main
+
+write-ghc-environment-files: always
+```
+
+### Session Value Preservation
+
+**Recent engineering session (2026-04-26 to 2026-04-28):**
+- Grepl.CircuitDev module created (interactive harness for circuits)
+- cards/dev-guide.md written (patterns, workflow, examples)
+- PTY spawning integrated and tested
+- Circuit tensor types proven (simultaneous vs sequential feedback)
+
+**Preservation action:** Ensure dev-guide.md content is mirrored in module haddocks so knowledge persists beyond one session.
+
+### Estimated Effort
+
+1. **Documentation** (60 min): readme.md, module headers
+2. **Metadata** (15 min): cabal, CHANGELOG
+3. **Code quality** (30 min): formatting, linting, doctest
+4. **CI setup** (15 min): workflow copy, matrix update
+5. **Verification** (20 min): build, haddock, test
+
+**Total:** ~2-3 hours for complete standardization
+
+### Execution Path
+
+1. Start with documentation (readme + module headers)
+2. Update cabal metadata
+3. Run code quality checks (formatting, lint)
+4. Set up CI workflow
+5. Final verification (build clean, haddock, doctest, CI pass)
+6. Commit and push
