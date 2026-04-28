@@ -1,3 +1,8 @@
+---
+name: browser-tools
+description: DOM navigation, element extraction, and web interaction primitives
+---
+
 # browser-tools ⟜ shared Chrome daemon for multi-agent browser automation
 
 **Location:** `~/other/pi-skills/browser-tools/` on `browser-chat` branch

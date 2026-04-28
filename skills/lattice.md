@@ -1,3 +1,8 @@
+---
+name: lattice
+description: Order theory, poset structures, and knowledge graphs
+---
+
 # work/lattice.md
 
 **lattice** ⟜ parallel structure across aligned decks

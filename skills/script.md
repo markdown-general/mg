@@ -1,3 +1,8 @@
+---
+name: script
+description: Automation, shell scripting, and task runners
+---
+
 ## script ⟜ written narrative or story involving choreography ⟜ often of a logical or process flow ⟜ often encoded or as code.
 
 Looks like you're writing a script.

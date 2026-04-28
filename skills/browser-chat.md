@@ -1,3 +1,8 @@
+---
+name: browser-chat
+description: Web-based chat interaction and conversation modeling
+---
+
 # browser-chat ⟜ multi-system chat automation
 
 **Location:** `~/other/pi-skills/browser-tools/` on `browser-chat` branch

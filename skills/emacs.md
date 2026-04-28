@@ -1,6 +1,8 @@
-## emacs ⟡ our agent setup
+---
+name: emacs
+description: Shared surface interface for immediate agent-runner interaction
+---
 
-start server ⟡ `emacs --daemon`
 verify ⟡ `emacsclient -e "(server-running-p)"`
 
 open (visible) frame ⟡ `emacsclient -c`

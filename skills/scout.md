@@ -1,3 +1,8 @@
+---
+name: scout
+description: Lightweight exploration agent for discovery and automation
+---
+
 # scout ⟜ exploring new technology horizons
 
 **scout** ⟜ pattern-match upstream; find the live edges; build confidence through experiment

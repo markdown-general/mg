@@ -1,3 +1,10 @@
+---
+name: drift
+description: Semantic and semiotic drift over time and context shifts
+---
+
+---
+
 **drift** ⟜ divergence detection and recovery
 **detection** ⟜ vaguelyclear signals gap without breaking
 **marks** ⟜ 🚩 captures where plan met reality

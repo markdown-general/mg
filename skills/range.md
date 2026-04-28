@@ -1,3 +1,8 @@
+---
+name: range
+description: Ordering, bounds, and constraint spaces
+---
+
 range is a technique used to cast a wide net over a lead token in an effort to explore lead meaning and understand the semantic tweaking that is possible.
 
 **cast** is a word that we use a lot. To cast a pattern can mean:

@@ -1,3 +1,10 @@
+---
+name: duality
+description: Symmetry and bidirectional structures in design
+---
+
+---
+
 Duality Collapse ⟜ moment when apparent opposites dissolve into unified understanding
 
 Pattern recognition ⟜ seeing through false distinctions, recognizing underlying unity

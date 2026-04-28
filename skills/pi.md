@@ -1,3 +1,8 @@
+---
+name: pi
+description: Agent architecture, extensibility, multi-provider LLM, and session management
+---
+
 # pi ecosystem ⟜ agent architecture
 
 **What:** pi-coding-agent is a conversational AI agent platform. Minimal core (agent loop), maximum extensibility via packages. Multi-provider LLM support, session management with branching, TUI interface, extensibility via plugins.

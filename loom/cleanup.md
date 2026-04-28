@@ -23,15 +23,16 @@
 
 🟢 ⥁ start.md
 
+🟢 ⥁ ~/haskell/grepl/
+
+⟜ created loom/grepl.md workspace card with standardization checklist.
+⟜ added grepl case study to buff/haskell-checklist.md for reproducible setup.
+
 ◊
 
-🟣 ⥁ ~/haskell/grepl/
-
-🟣 ⥁ ~/haskell/grepl/
-
-🟣 ⧈ AgentLoadout R&D ⟜ installed and forgotten, needs proper follow-up
-
-🟣 ⧈ ast-grep ⟜ learn, hook up ~/.agent-loadout/
+🟣 AgentLoadout R&D ⟜ installed and forgotten, needs proper follow-up.
+   ~/.agent-loadout/
 
 🟣 ⊲ anthropic skills standard
 
+⧈ 

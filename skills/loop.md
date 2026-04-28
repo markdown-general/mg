@@ -1,4 +1,9 @@
-## looping-humans
+#---
+name: loop
+description: Feedback, state threading, and categorical loops
+---
+
+# looping-humans
 
 ### humans-out-of-loop
 

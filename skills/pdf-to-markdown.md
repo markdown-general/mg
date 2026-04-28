@@ -1,3 +1,8 @@
+---
+name: pdf-to-markdown
+description: Document conversion and structured text extraction from PDFs
+---
+
 # pdf-to-markdown ⟜ PDF → Markdown + images + LaTeX recovery
 
 **Source:** Claude analysis (2026-04-19)  

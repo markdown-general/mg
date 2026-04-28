@@ -1,3 +1,8 @@
+---
+name: session
+description: Conversation state, immutable records, and session branching
+---
+
 # session ⟜ Immutable, branching conversation records
 
 Sessions are the core unit of work in pi-mono. They're append-only JSONL files that record every action: messages, tool execution, model changes, branching decisions, user annotations, and extension-specific data.

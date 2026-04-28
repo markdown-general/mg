@@ -1,3 +1,8 @@
+---
+name: haskell
+description: Language standards, patterns, and best practices for Haskell development
+---
+
 # buff-haskell
 
 Haskell libraries tend to go in ~/haskell/. The repos there are mostly Haskell libraries and can be a good resource for pattern matching solutions.

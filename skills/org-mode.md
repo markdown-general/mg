@@ -1,4 +1,9 @@
-### org-mode ⟜ shared task state
+#---
+name: org-mode
+description: Note taking, task management, and org protocol integration
+---
+
+## org-mode ⟜ shared task state
 
 **What it is:** Agenda items hold shared task state. Keywords: `ToDo` → `Next` → `Blocked` | `Done`.
 

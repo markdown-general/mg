@@ -15,6 +15,11 @@ cache flatten --output ../cache-core.md
 
 cache split cache-core.md --output-dir ../restored/
 # restored/ will have the same markdown files as 
+---
+name: cache
+description: Context management, handoff strategies, and efficient storage
+---
+
 # cache-core.md wraps (which was core/)
 # diff -r . ../restored/
 

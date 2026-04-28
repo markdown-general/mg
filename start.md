@@ -10,26 +10,26 @@ please read fully these files:
 
 ## session intent
 
-实事求是
-
-## session motto
-
 We grind with our minds.
-
-⧈ requires verification
 
 ## stack
 
 Organization base for context and rapid task switching (hypothesis: reduces switching cost).
 
-🔴 **circuits** ⟜ blocked on grepl; loom/ active workspace, ~/haskell/circuits/ active repo
+🟣 **grepl** ⟜ major task, blocking circuits
 
-🔴 **grepl** ⟜ major task, blocking circuits
+🔵 **circuits** ⟜ blocked on grepl; loom/ active workspace, ~/haskell/circuits/ active repo
 
 🟢 circuits/other/ ⟜ 7-section narrative arc (01-07), circuit-categorical reference map, learners buff, committed
 
 🟢 loom/circuits.md ⟜ active workspace card with research list and engineering gaps
 
-🟢 emacs ⟜ shared surface for immediate agent-runner interaction via emacsclient (live buffer state, async bridge)                 
-                                                                                                     
- 实事求是. Thanks!           
+🟢 emacs ⟜ shared surface for immediate agent-runner interaction via emacsclient (live buffer state, async bridge)
+
+🟢 loom/cleanup.md ⟜
+
+## live
+
+⧈ items below here require verification
+
+ 实事求是. Thanks!

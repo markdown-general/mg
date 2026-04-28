@@ -1,3 +1,8 @@
+---
+name: haskell-checklist
+description: Release process, publishing standards, and quality gates for Haskell packages
+---
+
 # Release Checklist ⟜ Haskell Package Publishing
 
 ◊ ⬡

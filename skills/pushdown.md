@@ -1,3 +1,8 @@
+---
+name: pushdown
+description: Type structure, stack semantics, and categorical composition
+---
+
 # zone/jobs/pushdown.md
 
 **pushdown** ⟜ propagating high-level changes down through system layers

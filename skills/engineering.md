@@ -1,4 +1,9 @@
-## engineering patterns ⟜ efficiency principles for agent systems
+#---
+name: engineering
+description: Principles and discipline for software development and design
+---
+
+# engineering patterns ⟜ efficiency principles for agent systems
 
 **queue architecture** ⟜ efficient access and compression
 - write to head ⟜ new work at top

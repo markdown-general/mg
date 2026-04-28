@@ -1,3 +1,8 @@
+---
+name: skills
+description: Reusable knowledge and skill loading systems
+---
+
 # Pi Skills & Agent Orchestration
 
 ⟝ Skills search: identify instructional content and orchestration patterns for pi agents

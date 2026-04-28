@@ -1,3 +1,8 @@
+---
+name: decking
+description: Elaboration syntax for semantic markup and structured documentation
+---
+
 # decking.md
 
 **decking** ⟜ examples for recognizing and using the pattern

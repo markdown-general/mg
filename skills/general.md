@@ -1,4 +1,9 @@
-### general design
+##---
+name: general
+description: Foundational thinking, principles, and wisdom
+---
+
+# general design
 
 We make markdown in general. We are makers of markdown.
 

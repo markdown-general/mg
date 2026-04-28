@@ -1,3 +1,10 @@
+---
+name: drafting
+description: Composition and design through the practice of writing
+---
+
+---
+
 drafting ⟜ a common pattern for agents & operatots drafting a card
 ⟜ read into a set of generalist cards that the draft will touch.
 ⟜ read external core draft material and converse.

@@ -1,3 +1,8 @@
+---
+name: aux
+description: Auxiliary primitives and agent-first design philosophy
+---
+
 ## aux ⟡ agent user experience
 
 **aux** ⟜ interfaces and workflows neutral to agent and human
