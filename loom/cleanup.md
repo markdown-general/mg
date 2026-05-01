@@ -1,3 +1,5 @@
+✨
+
 **marks**
 
 🟣 ⟜ todo item, work unit
@@ -35,7 +37,5 @@
 ⟜ 25 cards now structured: Semantic, Design, Code, Tools, AgentDev, Agents
 ⟜ next: assess ~/.agent-loadout/ for integration, test subagents install
 
-◊
-
-🟣 ⧈ AgentLoadout R&D ⟜ installed and forgotten, needs proper follow-up.
+🟢 ⧈ AgentLoadout R&D ⟜ transferred to loom/skills-surfacing.md
    ~/.agent-loadout/ (57 tools with skill documentation) 

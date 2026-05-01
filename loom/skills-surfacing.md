@@ -1,4 +1,4 @@
-◊
+✨
 
 # skills-surfacing ⟜ agent discovery and progressive learning
 
