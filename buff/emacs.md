@@ -3,6 +3,8 @@ name: emacs
 description: Shared surface interface for immediate agent-runner interaction
 ---
 
+start daemon ⟡ `cd ~/mg && emacs --daemon` then `emacsclient -c &`
+
 verify ⟡ `emacsclient -e "(server-running-p)"`
 
 open (visible) frame ⟡ `emacsclient -c`
