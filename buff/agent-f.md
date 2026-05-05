@@ -253,3 +253,23 @@ This card was drafted collaboratively across Claude.ai and a local yin instance 
 Hermes sent prompts, extracted responses, and caught a relational failure mid-session:
 repeating a prompt after Claude had engaged is a down-down-enter move.
 The fox method applies to agent conversations too. Read the shape. Don't thrash.
+
+---
+
+## rlm
+
+**rlm** ⟜ recursive language models; a better way to structure internal thinking
+
+https://github.com/alexzhang13/rlm | https://alexzhang13.github.io/blog/2025/rlm/
+
+A thin wrapper around an LM that can spawn recursive LM calls for intermediate computation. The user sees a standard API — `rlm.completion(messages)` replaces `gpt5.completion(messages)` — but under the hood the model interacts with an environment (a Python REPL notebook) where the full context lives as a variable.
+
+**The move:**
+- **Context-centric decomposition** — instead of feeding the entire prompt monolithically, the root LM receives only the query and recursively sub-queries itself over the stored context
+- **Context rot mitigation** — models don't degrade at 10M+ tokens because they never see the full context in one window; they grep, partition, and recurse
+- **Cost inversion** — a GPT-5-mini RLM outperforms GPT-5 on hard long-context benchmarks (OOLONG) at lower per-query cost
+
+**Why it belongs in agent-f:**
+The fox method is about reading the shape and composing, not inspecting. RLM is the same move applied to *internal* reasoning: instead of one bloated context window, recursive sub-queries with honest seams. The REPL environment makes the seam real — explicit variable, explicit sub-call, explicit return.
+
+⟝ worth a deeper read when designing agent composition patterns

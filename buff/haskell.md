@@ -334,6 +334,43 @@ All doctests in the extracted file should pass. When they do, the card is a **va
 
 **Note:** Markdown cards are NOT integrated into cabal build stanzas. The *.md files are reference material and doctest repositories. Testing happens via manual extraction; when technology catches up, integration will be automatic. Haddock doctests in module definitions are still the standard for compiled libraries.
 
+## core library skills
+
+**core library skills** ⟜ living cards for how we use Haskell libraries
+
+Each card documents one library (containers, text, bytestring, profunctors, kan-extensions, aeson, lens, etc.) as a **recipe**: import qualifications, common patterns, type-level conventions, and the idioms we actually use.
+
+**The workflow:**
+
+1. **Start a project** — `cabal init`, add dependencies (e.g., `containers` and `lens`)
+2. **Open the cards** — read `buff/haskell-containers.md` and `buff/haskell-lens.md`
+3. **Test in a fresh repl** — `cabal repl`, import qualified as the card specifies, run the examples
+4. **Discover friction** — existing code clashes with the introduced encodings (wrong qualifiers, missing patterns, unfamiliar combinators)
+5. **Resolve immediately** — the card shows the right way; friction becomes education
+
+**Why this works:**
+- Cards are **tested artifacts**, not documentation you read once
+- A fresh repl forces honesty — if the card is wrong, the type checker complains
+- Friction between existing code and library idioms surfaces early, when it's cheap to fix
+- Over time, the cards become **team conventions** encoded as working examples
+
+**Candidate libraries:**
+- containers (Map, Set, Seq patterns)
+- text (Text vs String, strict/lazy, builder patterns)
+- bytestring (ByteString packing, parsing, builder)
+- profunctors (dimap, lmap, rmap, strong, choice)
+- kan-extensions (Ran, Lan, Yoneda, Coyoneda)
+- aeson (ToJSON/FromJSON, generic deriving, lens-aeson)
+- lens (folds, traversals, prisms, basic optics)
+- mtl (Reader, State, Except — transformer stacks)
+- unordered-containers (HashMap as default map)
+- vector (loop fusion, mutable interfaces)
+
+⟝ each card: import style, 5-10 essential combinators, common gotchas, doctest-validated examples
+⟝ cards live in `buff/haskell-<library>.md` or as skills in `buff/haskell-<library>/`
+
+---
+
 ## module type check
 
 A module type check is where:

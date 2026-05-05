@@ -23,3 +23,23 @@ The primary tradeoff in what should be scripted is
 
 For scripts close to agents, for example, natural language is the right flow if the code is peripheral to the main task - it is a tool not the object or endeavour.
 
+---
+
+## python environments
+
+**Never put `.venv/` inside a collaborative workspace.**
+
+Python virtual environments are build artifacts — compiled extensions, cached packages, platform-specific binaries. They don't belong in a shared surface like `~/mg/` where humans and agents navigate together.
+
+**Two acceptable patterns:**
+
+1. **Project-local outside the workspace** — `~/other/projectname/.venv/`
+   - Example: `~/other/nle/.venv/`
+   - The project has its own directory in `~/other/`; the venv lives there
+
+2. **Centralized** — `~/.local/share/venvs/projectname/`
+   - One location for all environments
+   - Keeps every workspace completely clean
+
+**The rule:** If you `ls` a workspace and see `.venv/`, something is in the wrong place. Move it.
+
