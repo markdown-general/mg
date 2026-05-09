@@ -19,6 +19,8 @@ open org agenda ⟡ `emacsclient -e "(with-selected-frame (car (last (frame-list
 
 read current buffer ⟡ `emacsclient -e "(with-selected-frame (car (last (frame-list))) (buffer-name (window-buffer (selected-window))))"`
 
+stop daemon ⟜ `emacsclient -c "(kill-emacs)"`
+
 ---
 
 ## emacsclient ⟡ shared surface intent
@@ -230,11 +232,13 @@ Organized by context. Most follow Doom convention: `SPC` (leader) + `m` (major m
 **Symbols** `SPC i s` — Circuit/hyper notation
 | key       | symbol  | description   |
 |-----------|---------|---------------|
-| `SPC i s l` | η | lift          |
-| `SPC i s w` | ε | lower         |
+| `SPC i s l` | ↑ | lift          |
+| `SPC i s w` | ↓ | lower         |
+| `SPC i s b` | ○ | base          |
 | `SPC i s .` | ⊙ | compose       |
 | `SPC i s p` | ⊲ | push          |
-| `SPC i s o` | ↬ | loop          |
+| `SPC i s i` | ⇸ | invoke        |
+| `SPC i s o` | ↬ | loop / type   |
 | `SPC i s r` | ⥁ | run           |
 | `SPC i s t` | ⥀ | trace         |
 | `SPC i s u` | ↯ | untrace       |

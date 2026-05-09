@@ -273,3 +273,70 @@ A thin wrapper around an LM that can spawn recursive LM calls for intermediate c
 The fox method is about reading the shape and composing, not inspecting. RLM is the same move applied to *internal* reasoning: instead of one bloated context window, recursive sub-queries with honest seams. The REPL environment makes the seam real — explicit variable, explicit sub-call, explicit return.
 
 ⟝ worth a deeper read when designing agent composition patterns
+
+---
+
+## agent-f as library
+
+**agent-f** isn't only a knowledge card. The name also wants to be a Haskell library.
+Two prototype repos explored the space. Neither is good enough to develop directly,
+but together they sketch what the library should be.
+
+### prototype archaeology
+
+`~/haskell/agent/` — JSON log sketch with the right *shape* but wrong *structure*.
+- `Log` as append-only `[Entry]` — O(n) everything; naive
+- `Entry` union type: `SessionEntry`, `MessageEntry`, `ModelChangeEntry`, `ThinkingLevelEntry`
+- `Agent = Log -> (Agent, Log)` — Mealy machine over structured history
+- JSONL load/save; `fork` extracts a branch into a sub-conversation
+- No remote, no tests, no CI. **Superseded.**
+
+`~/haskell/agent-fork/` — `pi` process harness via named pipes.
+- `PiConfig` + `defaultPiConfig` for FIFO paths and log files
+- `ensureFifo`, `resetChannel`, `piChannel` — thin `System.Process` wrapper
+- Has remote, CI, packaging. **Kept as utility, not as the library.**
+
+Neither implements the fox method or RLM. Future agent-f code starts fresh from this card.
+
+### what the library should be
+
+```haskell
+-- Core idea, not implementation
+newtype Agent m = Agent { step :: Log -> m (Agent m, Log) }
+```
+
+The `Agent` type from `~/haskell/agent/` was right in principle:
+a pure (or monadic) state machine whose state *is* the conversation history.
+The mistake was the representation — list of entries, O(n) append, no indexing.
+A real library needs:
+
+**1. Honest `Log` type**
+- Append-only, indexed, serializable
+- Entries are typed: messages, tool calls, tool results, model switches, thinking levels
+- Content items are recursive (text, thinking, tool call, tool result containing more content)
+- JSONL round-trip for interop with external agents (Claude, Kimi, pi)
+
+**2. `fork` as first-class operation**
+- Extract a branch (root to leaf) into a new `Log`
+- Sub-agents operate on the fork; results merge back or stand alone
+- This is RLM in Haskell: recursive agent calls with explicit context seams
+
+**3. IO adapters at the edges**
+- Process harness (from agent-fork): spawn pi, Claude CLI, or any tool via FIFOs
+- HTTP adapter: chat-with-claude as `String -> IO String`
+- REPL adapter: honest seams for grepl / GHCi interaction
+
+**4. No imaginary seams**
+- Session state is explicit in the `Log`, not implicit in a monad or global variable
+- Model changes are logged entries, not side effects
+- Tool calls and results are symmetric entries, not fire-and-forget
+
+### relationship to other repos
+
+- **haskell-this** ⟜ the method that produces the adapters. agent-f is the library those adapters plug into.
+- **grepl** ⟜ the REPL with honest seams. Its session log should be an agent-f `Log`.
+- **circuits** ⟜ the traced monoidal category work. agent-f's `fork` and merge are categorical operations on a free traced monoidal category of conversations.
+
+⟝ library location: `~/haskell/agent-f` (doesn't exist yet; use this card as the spec)
+⟝ first step: design `Log` representation (sequence, vector, fingertree?) against actual JSONL from Kimi/Claude/pi sessions
+⟝ second step: port `agent-fork` process harness to use the new `Log` type instead of raw text files

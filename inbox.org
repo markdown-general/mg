@@ -1,0 +1,2 @@
+* ToDo https://github.com/srid/agency
+* ToDo https://marcosh.github.io/post/2026/05/08/categorical-transformers.html
